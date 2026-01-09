@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Investments - Admin Panel</title>
+    
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="css/admin.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    
+    <div class="dashboard-wrapper">
+        <aside class="sidebar admin-sidebar" id="sidebar">
+            <div class="sidebar-header admin-sidebar-header">
+                <a href="admin-dashboard.html" class="sidebar-logo admin-logo">
+                    <i class="fas fa-user-shield"></i>
+                    <span>ADMIN PANEL</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Main</div>
+                    <a href="admin-dashboard.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Requests</div>
+                    <a href="pending-deposits.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Pending Deposits</span>
+                        <span class="badge" id="pendingDepositsCount">0</span>
+                    </a>
+                    <a href="pending-withdrawals.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-hourglass-half"></i>
+                        <span>Pending Withdrawals</span>
+                        <span class="badge" id="pendingWithdrawalsCount">0</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Management</div>
+                    <a href="users-management.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                    <a href="all-investments.html" class="menu-item admin-menu-item active">
+                        <i class="fas fa-chart-line"></i>
+                        <span>All Investments</span>
+                    </a>
+                    <a href="referral-tree.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-sitemap"></i>
+                        <span>Referral Tree</span>
+                    </a>
+                    <a href="salary-management.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Salary Management</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Account</div>
+                    <a href="#" onclick="logout()" class="menu-item admin-menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-chart-line"></i> All Investments</h1>
+                    <p>View all platform investments</p>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="stats-grid" style="margin-bottom: var(--spacing-lg);">
+                <div class="stat-card admin-stat-card">
+                    <div class="stat-body">
+                        <div class="stat-label">Total Investments</div>
+                        <div class="stat-value" id="totalInvestments">0</div>
+                    </div>
+                </div>
+                <div class="stat-card admin-stat-card">
+                    <div class="stat-body">
+                        <div class="stat-label">Active</div>
+                        <div class="stat-value" style="color: var(--neon-green);" id="activeInvestments">0</div>
+                    </div>
+                </div>
+                <div class="stat-card admin-stat-card">
+                    <div class="stat-body">
+                        <div class="stat-label">Total Amount</div>
+                        <div class="stat-value" id="totalAmount">$0</div>
+                    </div>
+                </div>
+                <div class="stat-card admin-stat-card">
+                    <div class="stat-body">
+                        <div class="stat-label">Total Profit Paid</div>
+                        <div class="stat-value" id="totalProfit">$0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filter -->
+            <div class="dashboard-card" style="margin-bottom: var(--spacing-lg);">
+                <div style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
+                    <button class="filter-btn active" data-status="all" onclick="filterInvestments('all')">
+                        All
+                    </button>
+                    <button class="filter-btn" data-status="active" onclick="filterInvestments('active')">
+                        Active
+                    </button>
+                    <button class="filter-btn" data-status="completed" onclick="filterInvestments('completed')">
+                        Completed
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Investments Table -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-list"></i>
+                        Investment List
+                    </h3>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Plan</th>
+                                <th>Amount</th>
+                                <th>Daily Profit</th>
+                                <th>Earned</th>
+                                <th>Progress</th>
+                                <th>Status</th>
+                                <th>Start Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="investmentsBody">
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 3rem;">
+                                    <div class="spinner"></div>
+                                    <p style="margin-top: var(--spacing-md); color: var(--text-gray);">Loading investments...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/all-investments.js"></script>
+    
+    <style>
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(0, 102, 255, 0.05);
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            border-radius: var(--radius-md);
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-weight: 500;
+        }
+        
+        .filter-btn:hover {
+            background: rgba(0, 102, 255, 0.1);
+            border-color: var(--electric-blue);
+            color: var(--electric-blue);
+        }
+        
+        .filter-btn.active {
+            background: var(--gradient-primary);
+            border-color: var(--electric-blue);
+            color: var(--white);
+        }
+    </style>
+    
+    <script>
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
