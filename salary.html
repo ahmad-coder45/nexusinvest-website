@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Plans - NexusInvest</title>
+    
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    
+    <div class="dashboard-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="sidebar-logo">
+                    <i class="fas fa-gem"></i>
+                    <span>NEXUSINVEST</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Main</div>
+                    <a href="dashboard.html" class="menu-item">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="my-investments.html" class="menu-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>My Investments</span>
+                    </a>
+                    <a href="plans.html" class="menu-item">
+                        <i class="fas fa-box"></i>
+                        <span>Investment Plans</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Financial</div>
+                    <a href="deposit.html" class="menu-item">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Deposit</span>
+                    </a>
+                    <a href="withdrawal.html" class="menu-item">
+                        <i class="fas fa-minus-circle"></i>
+                        <span>Withdraw</span>
+                    </a>
+                    <a href="transactions.html" class="menu-item">
+                        <i class="fas fa-history"></i>
+                        <span>Transactions</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Earnings</div>
+                    <a href="referrals.html" class="menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Referrals</span>
+                    </a>
+                    <a href="salary.html" class="menu-item active">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Salary Plans</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Account</div>
+                    <a href="profile.html" class="menu-item">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#" onclick="logout()" class="menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-money-bill-wave"></i> Weekly Salary Plans</h1>
+                    <p>Earn weekly salary based on your direct sales</p>
+                </div>
+            </div>
+            
+            <!-- Current Status -->
+            <div class="dashboard-card" style="margin-bottom: var(--spacing-lg); background: var(--gradient-accent); border: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-md);">
+                    <div>
+                        <h3 style="margin-bottom: 0.5rem; color: var(--primary-black);">
+                            Current Salary Plan
+                        </h3>
+                        <p style="margin: 0; color: rgba(0, 0, 0, 0.7);" id="currentPlanText">
+                            Loading...
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.9rem; color: rgba(0, 0, 0, 0.7);">Weekly Salary</div>
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--primary-black);" id="weeklySalary">
+                            $0
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="stats-grid" style="margin-bottom: var(--spacing-lg);">
+                <div class="stat-card">
+                    <div class="stat-body">
+                        <div class="stat-label">Direct Sales</div>
+                        <div class="stat-value" id="directSales">$0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-body">
+                        <div class="stat-label">Total Salary Earned</div>
+                        <div class="stat-value" id="totalSalary">$0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-body">
+                        <div class="stat-label">Last Payment</div>
+                        <div class="stat-value" style="font-size: 1.25rem;" id="lastPayment">Never</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-body">
+                        <div class="stat-label">Next Payment</div>
+                        <div class="stat-value" style="font-size: 1.25rem;" id="nextPayment">-</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Salary Plans -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-trophy"></i>
+                        Salary Plans
+                    </h3>
+                </div>
+                
+                <div style="display: grid; gap: var(--spacing-lg);">
+                    <!-- Plan 1 -->
+                    <div class="salary-plan-card" data-plan="1">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--spacing-md);">
+                            <div>
+                                <h3 style="margin-bottom: 0.5rem;">Plan 1 - Starter</h3>
+                                <p style="margin: 0; color: var(--text-gray);">Direct Sales: $50 - $99</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 0.85rem; color: var(--text-gray);">Weekly Salary</div>
+                                <div style="font-size: 2rem; font-weight: 700; color: var(--neon-green);">$5</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress1" style="width: 0%"></div>
+                        </div>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-gray);" id="status1">
+                            Need $50 in direct sales
+                        </p>
+                    </div>
+                    
+                    <!-- Plan 2 -->
+                    <div class="salary-plan-card" data-plan="2">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--spacing-md);">
+                            <div>
+                                <h3 style="margin-bottom: 0.5rem;">Plan 2 - Bronze</h3>
+                                <p style="margin: 0; color: var(--text-gray);">Direct Sales: $100 - $249</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 0.85rem; color: var(--text-gray);">Weekly Salary</div>
+                                <div style="font-size: 2rem; font-weight: 700; color: var(--neon-green);">$10</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress2" style="width: 0%"></div>
+                        </div>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-gray);" id="status2">
+                            Need $100 in direct sales
+                        </p>
+                    </div>
+                    
+                    <!-- Plan 3 -->
+                    <div class="salary-plan-card" data-plan="3">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--spacing-md);">
+                            <div>
+                                <h3 style="margin-bottom: 0.5rem;">Plan 3 - Silver</h3>
+                                <p style="margin: 0; color: var(--text-gray);">Direct Sales: $250 - $499</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 0.85rem; color: var(--text-gray);">Weekly Salary</div>
+                                <div style="font-size: 2rem; font-weight: 700; color: var(--neon-green);">$20</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress3" style="width: 0%"></div>
+                        </div>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-gray);" id="status3">
+                            Need $250 in direct sales
+                        </p>
+                    </div>
+                    
+                    <!-- Plan 4 -->
+                    <div class="salary-plan-card" data-plan="4">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--spacing-md);">
+                            <div>
+                                <h3 style="margin-bottom: 0.5rem;">Plan 4 - Gold</h3>
+                                <p style="margin: 0; color: var(--text-gray);">Direct Sales: $500+</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 0.85rem; color: var(--text-gray);">Weekly Salary</div>
+                                <div style="font-size: 2rem; font-weight: 700; color: var(--neon-green);">$40</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress4" style="width: 0%"></div>
+                        </div>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-gray);" id="status4">
+                            Need $500 in direct sales
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/salary.js"></script>
+    
+    <style>
+        .salary-plan-card {
+            padding: var(--spacing-lg);
+            background: rgba(0, 102, 255, 0.05);
+            border: 2px solid rgba(0, 102, 255, 0.2);
+            border-radius: var(--radius-lg);
+            transition: var(--transition-normal);
+        }
+        
+        .salary-plan-card:hover {
+            border-color: var(--electric-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .salary-plan-card.active {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+    </style>
+    
+    <script>
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
