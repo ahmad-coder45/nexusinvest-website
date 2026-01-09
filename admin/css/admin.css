@@ -1,0 +1,187 @@
+/* ============================================
+   ADMIN PANEL STYLES
+   ============================================ */
+
+.admin-wrapper {
+    background: var(--primary-black);
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: 280px;
+    background: var(--secondary-black);
+    border-right: 1px solid rgba(255, 68, 68, 0.2);
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: var(--z-fixed);
+}
+
+.admin-sidebar-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid rgba(255, 68, 68, 0.2);
+    background: linear-gradient(135deg, rgba(255, 68, 68, 0.1), rgba(255, 170, 0, 0.1));
+}
+
+.admin-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ff4444, #ffaa00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.admin-logo i {
+    color: #ff4444;
+    -webkit-text-fill-color: #ff4444;
+}
+
+.admin-menu-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 0.875rem var(--spacing-sm);
+    color: var(--text-gray);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
+    margin-bottom: 0.25rem;
+}
+
+.admin-menu-item:hover {
+    background: rgba(255, 68, 68, 0.1);
+    color: #ff4444;
+}
+
+.admin-menu-item.active {
+    background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(255, 170, 0, 0.2));
+    color: #ff4444;
+    border-left: 3px solid #ff4444;
+}
+
+.admin-stat-card {
+    background: rgba(26, 26, 26, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 68, 68, 0.2);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    transition: var(--transition-normal);
+}
+
+.admin-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 32px rgba(255, 68, 68, 0.3);
+    border-color: #ff4444;
+}
+
+.admin-badge {
+    background: rgba(255, 68, 68, 0.2);
+    color: #ff4444;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.admin-badge.warning {
+    background: rgba(255, 170, 0, 0.2);
+    color: #ffaa00;
+}
+
+.admin-badge.success {
+    background: rgba(0, 255, 136, 0.2);
+    color: var(--neon-green);
+}
+
+.action-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.action-btn.approve {
+    background: rgba(0, 255, 136, 0.2);
+    color: var(--neon-green);
+    border: 1px solid var(--neon-green);
+}
+
+.action-btn.approve:hover {
+    background: var(--neon-green);
+    color: var(--primary-black);
+}
+
+.action-btn.reject {
+    background: rgba(255, 68, 68, 0.2);
+    color: #ff4444;
+    border: 1px solid #ff4444;
+}
+
+.action-btn.reject:hover {
+    background: #ff4444;
+    color: var(--white);
+}
+
+.action-btn.view {
+    background: rgba(0, 102, 255, 0.2);
+    color: var(--electric-blue);
+    border: 1px solid var(--electric-blue);
+}
+
+.action-btn.view:hover {
+    background: var(--electric-blue);
+    color: var(--white);
+}
+
+.admin-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-modal);
+    padding: var(--spacing-md);
+}
+
+.admin-modal.active {
+    display: flex;
+}
+
+.admin-modal-content {
+    background: rgba(26, 26, 26, 0.98);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.proof-image {
+    width: 100%;
+    border-radius: var(--radius-md);
+    margin: var(--spacing-md) 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 1024px) {
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .admin-sidebar.active {
+        transform: translateX(0);
+    }
+}
