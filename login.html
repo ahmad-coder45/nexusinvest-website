@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login to your NexusInvest account and manage your crypto mining investments.">
+    <title>Login - NexusInvest</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <h1 class="auth-title">Welcome Back</h1>
+                <p class="auth-subtitle">Login to your NexusInvest account</p>
+            </div>
+            
+            <form id="loginForm">
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            class="form-input" 
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+                </div>
+                
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            class="form-input" 
+                            placeholder="Enter your password"
+                            required
+                        >
+                        <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Remember Me & Forgot Password -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
+                    <div class="checkbox-group" style="margin-bottom: 0;">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="#" onclick="forgotPassword()" style="color: var(--electric-blue); font-size: 0.9rem;">
+                        Forgot Password?
+                    </a>
+                </div>
+                
+                <!-- Submit Button -->
+                <button type="submit" class="auth-button" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
+            
+            <!-- Quick Links -->
+            <div style="display: grid; gap: 0.75rem; margin-bottom: var(--spacing-md);">
+                <a href="admin/admin-login.html" class="btn btn-outline" style="width: 100%; text-align: center;">
+                    <i class="fas fa-user-shield"></i> Admin Login
+                </a>
+            </div>
+            
+            <!-- Footer -->
+            <div class="auth-footer">
+                Don't have an account? <a href="register.html">Register here</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 400px; background: rgba(26, 26, 26, 0.98); border: 1px solid rgba(0, 102, 255, 0.3); border-radius: var(--radius-xl); padding: var(--spacing-xl);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
+                <h3 style="margin: 0;">Reset Password</h3>
+                <button onclick="closeModal('forgotPasswordModal')" style="background: none; border: none; color: var(--text-gray); font-size: 1.5rem; cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <p style="color: var(--text-gray); margin-bottom: var(--spacing-md);">
+                Enter your email address and we'll send you a link to reset your password.
+            </p>
+            <form id="forgotPasswordForm">
+                <div class="form-group">
+                    <label for="resetEmail" class="form-label">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="resetEmail" 
+                        class="form-input" 
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+                <button type="submit" class="auth-button">
+                    <i class="fas fa-paper-plane"></i> Send Reset Link
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <script>
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+        
+        // Forgot password
+        function forgotPassword() {
+            event.preventDefault();
+            openModal('forgotPasswordModal');
+        }
+        
+        // Modal styles
+        const modalStyles = document.createElement('style');
+        modalStyles.textContent = `
+            .modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: var(--z-modal);
+                padding: var(--spacing-md);
+            }
+            
+            .modal-content {
+                animation: fadeInUp 0.3s ease;
+            }
+        `;
+        document.head.appendChild(modalStyles);
+    </script>
+</body>
+</html>
