@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referrals - NexusInvest</title>
+    
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    
+    <div class="dashboard-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="sidebar-logo">
+                    <i class="fas fa-gem"></i>
+                    <span>NEXUSINVEST</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Main</div>
+                    <a href="dashboard.html" class="menu-item">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="my-investments.html" class="menu-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>My Investments</span>
+                    </a>
+                    <a href="plans.html" class="menu-item">
+                        <i class="fas fa-box"></i>
+                        <span>Investment Plans</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Financial</div>
+                    <a href="deposit.html" class="menu-item">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Deposit</span>
+                    </a>
+                    <a href="withdrawal.html" class="menu-item">
+                        <i class="fas fa-minus-circle"></i>
+                        <span>Withdraw</span>
+                    </a>
+                    <a href="transactions.html" class="menu-item">
+                        <i class="fas fa-history"></i>
+                        <span>Transactions</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Earnings</div>
+                    <a href="referrals.html" class="menu-item active">
+                        <i class="fas fa-users"></i>
+                        <span>Referrals</span>
+                    </a>
+                    <a href="salary.html" class="menu-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Salary Plans</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Account</div>
+                    <a href="profile.html" class="menu-item">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#" onclick="logout()" class="menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-users"></i> Referral Program</h1>
+                    <p>Earn 12% commission on Level 1, 2% on Level 2, 1% on Level 3</p>
+                </div>
+            </div>
+            
+            <!-- Referral Link -->
+            <div class="dashboard-card" style="margin-bottom: var(--spacing-lg); background: var(--gradient-primary); border: none;">
+                <h3 style="margin-bottom: var(--spacing-md); color: var(--white);">
+                    <i class="fas fa-share-alt"></i> Your Referral Link
+                </h3>
+                <div style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
+                    <input 
+                        type="text" 
+                        id="referralLink" 
+                        readonly 
+                        class="form-input" 
+                        style="flex: 1; min-width: 300px; background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.3); color: var(--white);"
+                    >
+                    <button onclick="copyReferralLink()" class="btn btn-accent">
+                        <i class="fas fa-copy"></i> Copy Link
+                    </button>
+                    <button onclick="shareReferralLink()" class="btn" style="background: rgba(255, 255, 255, 0.2); color: var(--white);">
+                        <i class="fas fa-share"></i> Share
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="stats-grid" style="margin-bottom: var(--spacing-lg);">
+                <div class="stat-card">
+                    <div class="stat-body">
+                        <div class="stat-label">Level 1 Referrals</div>
+                        <div class="stat-value" style="color: var(--neon-green);" id="level1Count">0</div>
+                        <div class="stat-description">12% Commission</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-body">
+                        <div class="stat-label">Level 2 Referrals</div>
+                        <div class="stat-value" style="color: var(--electric-blue);" id="level2Count">0</div>
+                        <div class="stat-description">2% Commission</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-body">
+                        <div class="stat-label">Level 3 Referrals</div>
+                        <div class="stat-value" style="color: var(--light-blue);" id="level3Count">0</div>
+                        <div class="stat-description">1% Commission</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-body">
+                        <div class="stat-label">Total Commissions</div>
+                        <div class="stat-value" id="totalCommissions">$0</div>
+                        <div class="stat-description">All Time Earnings</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- How It Works -->
+            <div class="dashboard-card" style="margin-bottom: var(--spacing-lg);">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-info-circle"></i>
+                        How Referral System Works
+                    </h3>
+                </div>
+                <div style="display: grid; gap: var(--spacing-md);">
+                    <div style="padding: var(--spacing-md); background: rgba(0, 255, 136, 0.05); border-left: 3px solid var(--neon-green); border-radius: var(--radius-sm);">
+                        <h4 style="margin-bottom: 0.5rem; color: var(--neon-green);">
+                            <i class="fas fa-star"></i> Level 1 - 12% Commission
+                        </h4>
+                        <p style="margin: 0; color: var(--text-gray);">
+                            Earn 12% commission on every investment made by users you directly refer
+                        </p>
+                    </div>
+                    
+                    <div style="padding: var(--spacing-md); background: rgba(0, 102, 255, 0.05); border-left: 3px solid var(--electric-blue); border-radius: var(--radius-sm);">
+                        <h4 style="margin-bottom: 0.5rem; color: var(--electric-blue);">
+                            <i class="fas fa-star"></i> Level 2 - 2% Commission
+                        </h4>
+                        <p style="margin: 0; color: var(--text-gray);">
+                            Earn 2% commission on investments made by referrals of your referrals
+                        </p>
+                    </div>
+                    
+                    <div style="padding: var(--spacing-md); background: rgba(0, 163, 255, 0.05); border-left: 3px solid var(--light-blue); border-radius: var(--radius-sm);">
+                        <h4 style="margin-bottom: 0.5rem; color: var(--light-blue);">
+                            <i class="fas fa-star"></i> Level 3 - 1% Commission
+                        </h4>
+                        <p style="margin: 0; color: var(--text-gray);">
+                            Earn 1% commission on third-level referral investments
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Referrals List -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-list"></i>
+                        Your Referrals
+                    </h3>
+                </div>
+                
+                <div style="margin-bottom: var(--spacing-md);">
+                    <button class="filter-btn active" data-level="all" onclick="filterReferrals('all')">
+                        All Levels
+                    </button>
+                    <button class="filter-btn" data-level="1" onclick="filterReferrals('1')">
+                        Level 1
+                    </button>
+                    <button class="filter-btn" data-level="2" onclick="filterReferrals('2')">
+                        Level 2
+                    </button>
+                    <button class="filter-btn" data-level="3" onclick="filterReferrals('3')">
+                        Level 3
+                    </button>
+                </div>
+                
+                <div id="referralsList">
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="spinner"></div>
+                        <p style="margin-top: var(--spacing-md); color: var(--text-gray);">Loading referrals...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/referrals.js"></script>
+    
+    <style>
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(0, 102, 255, 0.05);
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            border-radius: var(--radius-md);
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .filter-btn:hover {
+            background: rgba(0, 102, 255, 0.1);
+            border-color: var(--electric-blue);
+            color: var(--electric-blue);
+        }
+        
+        .filter-btn.active {
+            background: var(--gradient-primary);
+            border-color: var(--electric-blue);
+            color: var(--white);
+        }
+    </style>
+    
+    <script>
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
