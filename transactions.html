@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - NexusInvest</title>
+    
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    
+    <div class="dashboard-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="sidebar-logo">
+                    <i class="fas fa-gem"></i>
+                    <span>NEXUSINVEST</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Main</div>
+                    <a href="dashboard.html" class="menu-item">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="my-investments.html" class="menu-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>My Investments</span>
+                    </a>
+                    <a href="plans.html" class="menu-item">
+                        <i class="fas fa-box"></i>
+                        <span>Investment Plans</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Financial</div>
+                    <a href="deposit.html" class="menu-item">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Deposit</span>
+                    </a>
+                    <a href="withdrawal.html" class="menu-item">
+                        <i class="fas fa-minus-circle"></i>
+                        <span>Withdraw</span>
+                    </a>
+                    <a href="transactions.html" class="menu-item active">
+                        <i class="fas fa-history"></i>
+                        <span>Transactions</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Earnings</div>
+                    <a href="referrals.html" class="menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Referrals</span>
+                    </a>
+                    <a href="salary.html" class="menu-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Salary Plans</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Account</div>
+                    <a href="profile.html" class="menu-item">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#" onclick="logout()" class="menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-history"></i> Transaction History</h1>
+                    <p>View all your transactions</p>
+                </div>
+            </div>
+            
+            <!-- Filter Tabs -->
+            <div class="dashboard-card" style="margin-bottom: var(--spacing-lg);">
+                <div style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
+                    <button class="filter-btn active" data-filter="all" onclick="filterTransactions('all')">
+                        <i class="fas fa-list"></i> All
+                    </button>
+                    <button class="filter-btn" data-filter="deposit" onclick="filterTransactions('deposit')">
+                        <i class="fas fa-plus-circle"></i> Deposits
+                    </button>
+                    <button class="filter-btn" data-filter="withdrawal" onclick="filterTransactions('withdrawal')">
+                        <i class="fas fa-minus-circle"></i> Withdrawals
+                    </button>
+                    <button class="filter-btn" data-filter="investment" onclick="filterTransactions('investment')">
+                        <i class="fas fa-chart-line"></i> Investments
+                    </button>
+                    <button class="filter-btn" data-filter="daily_profit" onclick="filterTransactions('daily_profit')">
+                        <i class="fas fa-coins"></i> Daily Profits
+                    </button>
+                    <button class="filter-btn" data-filter="commission" onclick="filterTransactions('commission')">
+                        <i class="fas fa-users"></i> Commissions
+                    </button>
+                    <button class="filter-btn" data-filter="salary" onclick="filterTransactions('salary')">
+                        <i class="fas fa-money-bill-wave"></i> Salaries
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Transactions Table -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-list"></i>
+                        <span id="filterTitle">All Transactions</span>
+                    </h3>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Balance Before</th>
+                                <th>Balance After</th>
+                                <th>Description</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 3rem;">
+                                    <div class="spinner"></div>
+                                    <p style="margin-top: var(--spacing-md); color: var(--text-gray);">Loading transactions...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div id="pagination" style="display: none; margin-top: var(--spacing-lg); text-align: center;">
+                    <button onclick="loadPreviousPage()" id="prevBtn" class="btn btn-outline" style="margin-right: var(--spacing-sm);">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <span id="pageInfo" style="margin: 0 var(--spacing-md); color: var(--text-gray);"></span>
+                    <button onclick="loadNextPage()" id="nextBtn" class="btn btn-outline" style="margin-left: var(--spacing-sm);">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/transactions.js"></script>
+    
+    <style>
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(0, 102, 255, 0.05);
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            border-radius: var(--radius-md);
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-weight: 500;
+        }
+        
+        .filter-btn:hover {
+            background: rgba(0, 102, 255, 0.1);
+            border-color: var(--electric-blue);
+            color: var(--electric-blue);
+        }
+        
+        .filter-btn.active {
+            background: var(--gradient-primary);
+            border-color: var(--electric-blue);
+            color: var(--white);
+        }
+    </style>
+    
+    <script>
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
