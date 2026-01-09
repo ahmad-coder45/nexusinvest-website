@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - NexusInvest</title>
+    
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="navbar-logo">
+                <i class="fas fa-gem"></i>
+                <span>NEXUSINVEST</span>
+            </a>
+            
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="plans.html">Plans</a></li>
+                <li><a href="how-it-works.html">How It Works</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+                <li><a href="login.html" class="btn btn-outline btn-sm">Login</a></li>
+                <li><a href="register.html" class="btn btn-primary btn-sm">Get Started</a></li>
+            </ul>
+            
+            <button class="navbar-toggle" id="navbarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero-section" style="padding: 120px 0 80px;">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h1>Contact <span class="text-gradient">Us</span></h1>
+                <p>Get in touch with our support team</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section class="section">
+        <div class="container">
+            <div class="grid grid-2" style="gap: var(--spacing-2xl);">
+                <!-- Contact Info -->
+                <div data-aos="fade-right">
+                    <h2 style="margin-bottom: var(--spacing-lg);">Get In Touch</h2>
+                    
+                    <div class="feature-card" style="margin-bottom: var(--spacing-md);">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                            <div class="feature-icon" style="background: rgba(0, 102, 255, 0.1);">
+                                <i class="fas fa-envelope" style="color: var(--electric-blue);"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 0.25rem;">Email</h4>
+                                <p style="margin: 0; color: var(--text-gray);">support@nexusinvest.com</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card" style="margin-bottom: var(--spacing-md);">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                            <div class="feature-icon" style="background: rgba(0, 255, 136, 0.1);">
+                                <i class="fas fa-phone" style="color: var(--neon-green);"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 0.25rem;">Phone</h4>
+                                <p style="margin: 0; color: var(--text-gray);">+1 (555) 123-4567</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card" style="margin-bottom: var(--spacing-md);">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                            <div class="feature-icon" style="background: rgba(0, 163, 255, 0.1);">
+                                <i class="fas fa-clock" style="color: var(--light-blue);"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 0.25rem;">Support Hours</h4>
+                                <p style="margin: 0; color: var(--text-gray);">24/7 Available</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                            <div class="feature-icon" style="background: rgba(0, 102, 255, 0.1);">
+                                <i class="fas fa-map-marker-alt" style="color: var(--electric-blue);"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 0.25rem;">Address</h4>
+                                <p style="margin: 0; color: var(--text-gray);">123 Crypto Street, Blockchain City</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Form -->
+                <div data-aos="fade-left">
+                    <div class="feature-card">
+                        <h3 style="margin-bottom: var(--spacing-lg);">Send Us a Message</h3>
+                        
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name" class="form-label">Full Name</label>
+                                <input 
+                                    type="text" 
+                                    id="name" 
+                                    class="form-input" 
+                                    placeholder="Enter your name"
+                                    required
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input 
+                                    type="email" 
+                                    id="email" 
+                                    class="form-input" 
+                                    placeholder="Enter your email"
+                                    required
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject" class="form-label">Subject</label>
+                                <input 
+                                    type="text" 
+                                    id="subject" 
+                                    class="form-input" 
+                                    placeholder="Enter subject"
+                                    required
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea 
+                                    id="message" 
+                                    class="form-input" 
+                                    rows="5"
+                                    placeholder="Enter your message"
+                                    required
+                                ></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ Quick Links -->
+    <section class="section" style="background: rgba(0, 102, 255, 0.02);">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Need Quick <span class="text-gradient">Answers?</span></h2>
+                <p>Check out our frequently asked questions</p>
+            </div>
+            
+            <div style="text-align: center;" data-aos="zoom-in">
+                <a href="faq.html" class="btn btn-primary btn-lg">
+                    <i class="fas fa-question-circle"></i> Visit FAQ Page
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-gem"></i> NexusInvest</h3>
+                    <p>Professional crypto mining investment platform</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="plans.html">Plans</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="terms.html">Terms & Conditions</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright © 2025 Nexus Invest All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+        
+        // Contact form handler
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showToast('Message sent successfully! We will get back to you soon.', 'success');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
