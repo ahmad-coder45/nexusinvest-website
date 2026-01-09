@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Withdrawals - Admin Panel</title>
+    
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="css/admin.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    
+    <div class="dashboard-wrapper">
+        <aside class="sidebar admin-sidebar" id="sidebar">
+            <div class="sidebar-header admin-sidebar-header">
+                <a href="admin-dashboard.html" class="sidebar-logo admin-logo">
+                    <i class="fas fa-user-shield"></i>
+                    <span>ADMIN PANEL</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Main</div>
+                    <a href="admin-dashboard.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Requests</div>
+                    <a href="pending-deposits.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Pending Deposits</span>
+                        <span class="badge" id="pendingDepositsCount">0</span>
+                    </a>
+                    <a href="pending-withdrawals.html" class="menu-item admin-menu-item active">
+                        <i class="fas fa-hourglass-half"></i>
+                        <span>Pending Withdrawals</span>
+                        <span class="badge" id="pendingWithdrawalsCount">0</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Management</div>
+                    <a href="users-management.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                    <a href="all-investments.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>All Investments</span>
+                    </a>
+                    <a href="referral-tree.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-sitemap"></i>
+                        <span>Referral Tree</span>
+                    </a>
+                    <a href="salary-management.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Salary Management</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Account</div>
+                    <a href="#" onclick="logout()" class="menu-item admin-menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-hourglass-half"></i> Pending Withdrawals</h1>
+                    <p>Review and process withdrawal requests</p>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-list"></i>
+                        Withdrawal Requests
+                    </h3>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Amount</th>
+                                <th>Tax (5%)</th>
+                                <th>Net Amount</th>
+                                <th>Method</th>
+                                <th>Account</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="withdrawalsBody">
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 3rem;">
+                                    <div class="spinner"></div>
+                                    <p style="margin-top: var(--spacing-md); color: var(--text-gray);">Loading withdrawals...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Reject Modal -->
+    <div id="rejectModal" class="admin-modal">
+        <div class="admin-modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
+                <h3>Reject Withdrawal</h3>
+                <button onclick="closeRejectModal()" style="background: none; border: none; color: var(--text-gray); font-size: 1.5rem; cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="rejectForm">
+                <div class="form-group">
+                    <label for="rejectionReason" class="form-label">Rejection Reason</label>
+                    <textarea 
+                        id="rejectionReason" 
+                        class="form-input" 
+                        rows="4"
+                        placeholder="Enter reason for rejection..."
+                        required
+                    ></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; background: #ff4444;">
+                    <i class="fas fa-times-circle"></i> Confirm Rejection
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/admin-withdrawals.js"></script>
+    
+    <script>
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
