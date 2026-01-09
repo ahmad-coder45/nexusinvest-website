@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NexusInvest</title>
+    
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+</head>
+<body>
+    
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="sidebar-logo">
+                    <i class="fas fa-gem"></i>
+                    <span>NEXUSINVEST</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Main</div>
+                    <a href="dashboard.html" class="menu-item active">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="my-investments.html" class="menu-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>My Investments</span>
+                    </a>
+                    <a href="plans.html" class="menu-item">
+                        <i class="fas fa-box"></i>
+                        <span>Investment Plans</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Financial</div>
+                    <a href="deposit.html" class="menu-item">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Deposit</span>
+                    </a>
+                    <a href="withdrawal.html" class="menu-item">
+                        <i class="fas fa-minus-circle"></i>
+                        <span>Withdraw</span>
+                    </a>
+                    <a href="transactions.html" class="menu-item">
+                        <i class="fas fa-history"></i>
+                        <span>Transactions</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Earnings</div>
+                    <a href="referrals.html" class="menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Referrals</span>
+                    </a>
+                    <a href="salary.html" class="menu-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Salary Plans</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Account</div>
+                    <a href="profile.html" class="menu-item">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#" onclick="logout()" class="menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1>Welcome back, <span id="userName">User</span>! 👋</h1>
+                    <p>Here's what's happening with your investments today</p>
+                </div>
+                <div class="header-right">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificationCount">0</span>
+                    </button>
+                    <div class="user-menu">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <div class="user-info">
+                            <div class="user-name" id="userNameMenu">User</div>
+                            <div class="user-role">Investor</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>Live</span>
+                        </div>
+                    </div>
+                    <div class="stat-body">
+                        <div class="stat-label">Total Balance</div>
+                        <div class="stat-value" id="totalBalance">$0.00</div>
+                        <div class="stat-description">Withdrawable: <span id="withdrawableBalance">$0.00</span></div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon success">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                    </div>
+                    <div class="stat-body">
+                        <div class="stat-label">Bonus Balance</div>
+                        <div class="stat-value" id="bonusBalance">$1.00</div>
+                        <div class="stat-description">Non-withdrawable</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon info">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                    </div>
+                    <div class="stat-body">
+                        <div class="stat-label">Total Invested</div>
+                        <div class="stat-value" id="totalInvested">$0.00</div>
+                        <div class="stat-description">Active investments</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+12%</span>
+                        </div>
+                    </div>
+                    <div class="stat-body">
+                        <div class="stat-label">Total Earnings</div>
+                        <div class="stat-value" id="totalEarnings">$0.00</div>
+                        <div class="stat-description">All time profits</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="dashboard-card" style="margin-bottom: var(--spacing-lg);">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-bolt"></i>
+                        Quick Actions
+                    </h3>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md);">
+                    <a href="deposit.html" class="btn btn-primary" style="text-align: center;">
+                        <i class="fas fa-plus-circle"></i> Deposit Funds
+                    </a>
+                    <a href="plans.html" class="btn btn-accent" style="text-align: center;">
+                        <i class="fas fa-chart-line"></i> Invest Now
+                    </a>
+                    <a href="withdrawal.html" class="btn btn-outline" style="text-align: center;">
+                        <i class="fas fa-minus-circle"></i> Withdraw
+                    </a>
+                    <a href="referrals.html" class="btn btn-outline" style="text-align: center;">
+                        <i class="fas fa-users"></i> Refer & Earn
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Active Investments -->
+                <div class="grid-col-8">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-chart-line"></i>
+                                Active Investments
+                            </h3>
+                            <a href="my-investments.html" class="card-action-btn">View All</a>
+                        </div>
+                        <div id="activeInvestmentsContainer">
+                            <div class="empty-state">
+                                <i class="fas fa-chart-line"></i>
+                                <h3>No Active Investments</h3>
+                                <p>Start investing to see your active plans here</p>
+                                <a href="plans.html" class="btn btn-primary" style="margin-top: var(--spacing-md);">
+                                    Browse Plans
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Referral Stats -->
+                <div class="grid-col-4">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-users"></i>
+                                Referral Stats
+                            </h3>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-sm); background: rgba(0, 102, 255, 0.05); border-radius: var(--radius-md);">
+                                <div>
+                                    <div style="font-size: 0.85rem; color: var(--text-gray);">Level 1</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--neon-green);" id="level1Count">0</div>
+                                </div>
+                                <div style="font-size: 2rem; color: var(--neon-green); opacity: 0.3;">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-sm); background: rgba(0, 102, 255, 0.05); border-radius: var(--radius-md);">
+                                <div>
+                                    <div style="font-size: 0.85rem; color: var(--text-gray);">Level 2</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--electric-blue);" id="level2Count">0</div>
+                                </div>
+                                <div style="font-size: 2rem; color: var(--electric-blue); opacity: 0.3;">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-sm); background: rgba(0, 102, 255, 0.05); border-radius: var(--radius-md);">
+                                <div>
+                                    <div style="font-size: 0.85rem; color: var(--text-gray);">Level 3</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--light-blue);" id="level3Count">0</div>
+                                </div>
+                                <div style="font-size: 2rem; color: var(--light-blue); opacity: 0.3;">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            
+                            <div style="padding: var(--spacing-md); background: var(--gradient-accent); border-radius: var(--radius-md); text-align: center; color: var(--primary-black);">
+                                <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem;">Total Commission</div>
+                                <div style="font-size: 1.75rem; font-weight: 700;" id="totalCommission">$0.00</div>
+                            </div>
+                            
+                            <a href="referrals.html" class="btn btn-primary" style="width: 100%; text-align: center;">
+                                <i class="fas fa-share-alt"></i> Share Referral Link
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Transactions -->
+                <div class="grid-col-12">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-history"></i>
+                                Recent Transactions
+                            </h3>
+                            <a href="transactions.html" class="card-action-btn">View All</a>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table class="data-table" id="transactionsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Description</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactionsBody">
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-gray);">
+                                            No transactions yet
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Mobile Sidebar Toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    
+    <script>
+        // Mobile sidebar toggle
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024) {
+                if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
