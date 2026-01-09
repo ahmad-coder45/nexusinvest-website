@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - NexusInvest</title>
+    
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        .faq-item {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-md);
+            overflow: hidden;
+            transition: var(--transition-normal);
+        }
+        
+        .faq-item:hover {
+            border-color: var(--electric-blue);
+        }
+        
+        .faq-question {
+            padding: var(--spacing-lg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .faq-question:hover {
+            color: var(--electric-blue);
+        }
+        
+        .faq-answer {
+            padding: 0 var(--spacing-lg) var(--spacing-lg);
+            display: none;
+            color: var(--text-gray);
+            line-height: 1.8;
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        
+        .faq-icon {
+            transition: var(--transition-fast);
+            color: var(--electric-blue);
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="navbar-logo">
+                <i class="fas fa-gem"></i>
+                <span>NEXUSINVEST</span>
+            </a>
+            
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="plans.html">Plans</a></li>
+                <li><a href="how-it-works.html">How It Works</a></li>
+                <li><a href="faq.html" class="active">FAQ</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="login.html" class="btn btn-outline btn-sm">Login</a></li>
+                <li><a href="register.html" class="btn btn-primary btn-sm">Get Started</a></li>
+            </ul>
+            
+            <button class="navbar-toggle" id="navbarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero-section" style="padding: 120px 0 80px;">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h1>Frequently Asked <span class="text-gradient">Questions</span></h1>
+                <p>Find answers to common questions about NexusInvest</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ Section -->
+    <section class="section">
+        <div class="container">
+            <div style="max-width: 900px; margin: 0 auto;">
+                
+                <!-- General Questions -->
+                <h2 style="margin-bottom: var(--spacing-lg);" data-aos="fade-up">
+                    <i class="fas fa-info-circle" style="color: var(--electric-blue);"></i> General Questions
+                </h2>
+                
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What is NexusInvest?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        NexusInvest is a cryptocurrency mining investment platform that allows individuals to invest in crypto mining operations and earn daily profits without the technical complexities of setting up and maintaining mining equipment.
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How does NexusInvest work?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        You create an account, deposit funds, choose an investment plan, and start earning daily profits. We handle all the mining operations using professional-grade equipment, and you receive your share of the profits automatically every day.
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Is NexusInvest safe and legitimate?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, NexusInvest is a legitimate platform with real mining operations. We use bank-level security, encrypted transactions, and transparent operations. All investments are backed by actual mining hardware and operations.
+                    </div>
+                </div>
+                
+                <!-- Investment Questions -->
+                <h2 style="margin: var(--spacing-2xl) 0 var(--spacing-lg);" data-aos="fade-up">
+                    <i class="fas fa-chart-line" style="color: var(--neon-green);"></i> Investment Questions
+                </h2>
+                
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What is the minimum investment amount?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        The minimum investment is $5 with our Plan 01 - Basic Miner. We offer 7 different plans ranging from $5 to $550 to suit different investment capacities.
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What is the ROI and investment duration?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        All our plans offer 80% ROI over 30 days. You receive daily profits automatically, and after 30 days, your investment is complete. You can then reinvest or withdraw your earnings.
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Can I invest in multiple plans?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes! You can invest in multiple plans simultaneously. There's no limit to how many investments you can have active at the same time.
+                    </div>
+                </div>
+                
+                <!-- Deposit & Withdrawal Questions -->
+                <h2 style="margin: var(--spacing-2xl) 0 var(--spacing-lg);" data-aos="fade-up">
+                    <i class="fas fa-wallet" style="color: var(--electric-blue);"></i> Deposits & Withdrawals
+                </h2>
+                
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What payment methods do you accept?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        We accept three payment methods: Binance (USDT), JazzCash, and EasyPaisa. You can choose the most convenient method for you.
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How long does deposit approval take?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Deposits are usually approved within 24 hours after you upload payment proof. Our admin team reviews each deposit to ensure security and accuracy.
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What are the withdrawal restrictions?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        You can make maximum 2 withdrawals per month. First withdrawal is available 10 days after your first investment. Second withdrawal requires at least 1 active referral. A 5% tax is applied to all withdrawals.
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What is the minimum withdrawal amount?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        The minimum withdrawal amount is $5. You can withdraw your earnings anytime as long as you meet the withdrawal requirements.
+                    </div>
+                </div>
+                
+                <!-- Referral & Salary Questions -->
+                <h2 style="margin: var(--spacing-2xl) 0 var(--spacing-lg);" data-aos="fade-up">
+                    <i class="fas fa-users" style="color: var(--neon-green);"></i> Referrals & Salary
+                </h2>
+                
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How does the referral program work?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Our 3-level referral program pays: Level 1 (direct referrals) - 12%, Level 2 - 2%, Level 3 - 1%. You earn commissions whenever your referrals make investments.
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What are the salary plans?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Salary plans are based on your direct sales: Plan 1 ($50-$99) = $5/week, Plan 2 ($100-$249) = $10/week, Plan 3 ($250-$499) = $20/week, Plan 4 ($500+) = $40/week. Salaries are paid every Sunday.
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Do I get a bonus for joining?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes! Every new user receives a $1 welcome bonus upon registration. This bonus is automatically added to your account balance.
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content" data-aos="zoom-in">
+                <h2>Still Have Questions?</h2>
+                <p>Contact our support team for personalized assistance</p>
+                <div class="cta-buttons">
+                    <a href="contact.html" class="btn btn-accent btn-lg">
+                        <i class="fas fa-envelope"></i> Contact Support
+                    </a>
+                    <a href="register.html" class="btn btn-outline btn-lg">
+                        <i class="fas fa-user-plus"></i> Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-gem"></i> NexusInvest</h3>
+                    <p>Professional crypto mining investment platform</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="plans.html">Plans</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="terms.html">Terms & Conditions</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright © 2025 Nexus Invest All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+        
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
