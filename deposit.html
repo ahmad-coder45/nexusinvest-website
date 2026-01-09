@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit - NexusInvest</title>
+    
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+</head>
+<body>
+    
+    <div class="dashboard-wrapper">
+        <!-- Sidebar (same as dashboard) -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="sidebar-logo">
+                    <i class="fas fa-gem"></i>
+                    <span>NEXUSINVEST</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Main</div>
+                    <a href="dashboard.html" class="menu-item">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="my-investments.html" class="menu-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>My Investments</span>
+                    </a>
+                    <a href="plans.html" class="menu-item">
+                        <i class="fas fa-box"></i>
+                        <span>Investment Plans</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Financial</div>
+                    <a href="deposit.html" class="menu-item active">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Deposit</span>
+                    </a>
+                    <a href="withdrawal.html" class="menu-item">
+                        <i class="fas fa-minus-circle"></i>
+                        <span>Withdraw</span>
+                    </a>
+                    <a href="transactions.html" class="menu-item">
+                        <i class="fas fa-history"></i>
+                        <span>Transactions</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Earnings</div>
+                    <a href="referrals.html" class="menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Referrals</span>
+                    </a>
+                    <a href="salary.html" class="menu-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Salary Plans</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Account</div>
+                    <a href="profile.html" class="menu-item">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#" onclick="logout()" class="menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-plus-circle"></i> Deposit Funds</h1>
+                    <p>Add funds to your account to start investing</p>
+                </div>
+            </div>
+            
+            <!-- Deposit Info -->
+            <div class="dashboard-card" style="margin-bottom: var(--spacing-lg); background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 255, 136, 0.1)); border: 1px solid rgba(0, 102, 255, 0.3);">
+                <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                    <div style="font-size: 3rem; color: var(--neon-green);">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 0.5rem;">Deposit Information</h3>
+                        <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-gray);">
+                            <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 0.5rem;"></i> Minimum deposit: <strong>$5</strong></li>
+                            <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 0.5rem;"></i> No deposit fees</li>
+                            <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 0.5rem;"></i> Instant credit after admin approval</li>
+                            <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 0.5rem;"></i> 3 payment methods available</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-grid">
+                <!-- Payment Method Selection -->
+                <div class="grid-col-4">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-credit-card"></i>
+                                Payment Method
+                            </h3>
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                            <div class="payment-method-card" data-method="binance" onclick="selectPaymentMethod('binance')">
+                                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                                    <div style="font-size: 2rem; color: #F3BA2F;">
+                                        <i class="fab fa-bitcoin"></i>
+                                    </div>
+                                    <div>
+                                        <h4 style="margin: 0;">Binance</h4>
+                                        <p style="margin: 0; font-size: 0.85rem; color: var(--text-gray);">Crypto Wallet</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method-card" data-method="jazzcash" onclick="selectPaymentMethod('jazzcash')">
+                                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                                    <div style="font-size: 2rem; color: #FF6B00;">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h4 style="margin: 0;">JazzCash</h4>
+                                        <p style="margin: 0; font-size: 0.85rem; color: var(--text-gray);">Mobile Wallet</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method-card" data-method="easypaisa" onclick="selectPaymentMethod('easypaisa')">
+                                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                                    <div style="font-size: 2rem; color: #00A859;">
+                                        <i class="fas fa-wallet"></i>
+                                    </div>
+                                    <div>
+                                        <h4 style="margin: 0;">EasyPaisa</h4>
+                                        <p style="margin: 0; font-size: 0.85rem; color: var(--text-gray);">Mobile Wallet</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Deposit Form -->
+                <div class="grid-col-8">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                Deposit Details
+                            </h3>
+                        </div>
+                        
+                        <!-- Payment Details (Hidden initially) -->
+                        <div id="paymentDetails" style="display: none; margin-bottom: var(--spacing-lg); padding: var(--spacing-md); background: rgba(0, 102, 255, 0.05); border: 1px solid rgba(0, 102, 255, 0.2); border-radius: var(--radius-md);">
+                            <h4 style="margin-bottom: var(--spacing-md); color: var(--electric-blue);">
+                                <i class="fas fa-arrow-right"></i> Send payment to:
+                            </h4>
+                            <div id="paymentDetailsContent"></div>
+                        </div>
+                        
+                        <!-- Deposit Form -->
+                        <form id="depositForm">
+                            <div class="form-group">
+                                <label for="amount" class="form-label">Deposit Amount (USD)</label>
+                                <input 
+                                    type="number" 
+                                    id="amount" 
+                                    class="form-input" 
+                                    placeholder="Enter amount (Min: $5)"
+                                    min="5"
+                                    step="0.01"
+                                    required
+                                >
+                                <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 0.5rem;">
+                                    Minimum: $5 | No maximum limit
+                                </p>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="proofFile" class="form-label">Upload Payment Proof</label>
+                                <div style="position: relative;">
+                                    <input 
+                                        type="file" 
+                                        id="proofFile" 
+                                        accept="image/*"
+                                        style="display: none;"
+                                        required
+                                    >
+                                    <button type="button" onclick="document.getElementById('proofFile').click()" class="btn btn-outline" style="width: 100%;">
+                                        <i class="fas fa-cloud-upload-alt"></i> Choose File
+                                    </button>
+                                    <div id="fileName" style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-gray);"></div>
+                                </div>
+                                <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 0.5rem;">
+                                    Upload screenshot of payment (Max: 5MB)
+                                </p>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" id="submitBtn" style="width: 100%;" disabled>
+                                <i class="fas fa-paper-plane"></i> Submit Deposit Request
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/deposit.js"></script>
+    
+    <style>
+        .payment-method-card {
+            padding: var(--spacing-md);
+            background: rgba(0, 102, 255, 0.05);
+            border: 2px solid rgba(0, 102, 255, 0.2);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        
+        .payment-method-card:hover {
+            background: rgba(0, 102, 255, 0.1);
+            border-color: var(--electric-blue);
+            transform: translateX(5px);
+        }
+        
+        .payment-method-card.selected {
+            background: rgba(0, 102, 255, 0.15);
+            border-color: var(--electric-blue);
+            box-shadow: var(--shadow-md);
+        }
+    </style>
+    
+    <script>
+        // Mobile sidebar toggle
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+        
+        // File input change
+        document.getElementById('proofFile').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                document.getElementById('fileName').innerHTML = `
+                    <i class="fas fa-check-circle" style="color: var(--neon-green);"></i> ${fileName}
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
