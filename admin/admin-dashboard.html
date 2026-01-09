@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - NexusInvest</title>
+    
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="css/admin.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    
+    <div class="dashboard-wrapper">
+        <aside class="sidebar admin-sidebar" id="sidebar">
+            <div class="sidebar-header admin-sidebar-header">
+                <a href="admin-dashboard.html" class="sidebar-logo admin-logo">
+                    <i class="fas fa-user-shield"></i>
+                    <span>ADMIN PANEL</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Main</div>
+                    <a href="admin-dashboard.html" class="menu-item admin-menu-item active">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Requests</div>
+                    <a href="pending-deposits.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Pending Deposits</span>
+                        <span class="badge" id="pendingDepositsCount">0</span>
+                    </a>
+                    <a href="pending-withdrawals.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-hourglass-half"></i>
+                        <span>Pending Withdrawals</span>
+                        <span class="badge" id="pendingWithdrawalsCount">0</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Management</div>
+                    <a href="users-management.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                    <a href="all-investments.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>All Investments</span>
+                    </a>
+                    <a href="referral-tree.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-sitemap"></i>
+                        <span>Referral Tree</span>
+                    </a>
+                    <a href="salary-management.html" class="menu-item admin-menu-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Salary Management</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Account</div>
+                    <a href="#" onclick="logout()" class="menu-item admin-menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+                    <p>Platform overview and statistics</p>
+                </div>
+            </div>
+            
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card admin-stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(255, 68, 68, 0.1); color: #ff4444;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="stat-body">
+                        <div class="stat-label">Total Users</div>
+                        <div class="stat-value" id="totalUsers">0</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card admin-stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(0, 255, 136, 0.1); color: var(--neon-green);">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                    </div>
+                    <div class="stat-body">
+                        <div class="stat-label">Total Invested</div>
+                        <div class="stat-value" id="totalInvested">$0</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card admin-stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(0, 102, 255, 0.1); color: var(--electric-blue);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    <div class="stat-body">
+                        <div class="stat-label">Active Investments</div>
+                        <div class="stat-value" id="activeInvestments">0</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card admin-stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(255, 170, 0, 0.1); color: #ffaa00;">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                    <div class="stat-body">
+                        <div class="stat-label">Pending Requests</div>
+                        <div class="stat-value" id="pendingRequests">0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="dashboard-card" style="margin-bottom: var(--spacing-lg);">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-bolt"></i>
+                        Quick Actions
+                    </h3>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md);">
+                    <a href="pending-deposits.html" class="btn btn-primary" style="text-align: center;">
+                        <i class="fas fa-clock"></i> Pending Deposits
+                    </a>
+                    <a href="pending-withdrawals.html" class="btn btn-primary" style="text-align: center;">
+                        <i class="fas fa-hourglass-half"></i> Pending Withdrawals
+                    </a>
+                    <a href="users-management.html" class="btn btn-outline" style="text-align: center;">
+                        <i class="fas fa-users"></i> Manage Users
+                    </a>
+                    <a href="all-investments.html" class="btn btn-outline" style="text-align: center;">
+                        <i class="fas fa-chart-line"></i> View Investments
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-history"></i>
+                        Recent Activity
+                    </h3>
+                </div>
+                <div id="recentActivity">
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="spinner"></div>
+                        <p style="margin-top: var(--spacing-md); color: var(--text-gray);">Loading activity...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/admin-dashboard.js"></script>
+    
+    <script>
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
