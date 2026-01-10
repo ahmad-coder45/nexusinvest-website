@@ -21,7 +21,7 @@
             background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
         }
         
-        .auth-card {
+        .auth-box {
             border: 2px solid #ff4444;
             box-shadow: 0 0 30px rgba(255, 68, 68, 0.3);
         }
@@ -57,22 +57,101 @@
             color: #ff4444;
             margin-right: 0.5rem;
         }
+        
+        /* Fix input field cursor and styling */
+        .input-group {
+            position: relative;
+            width: 100%;
+        }
+        
+        .input-group i.input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 1rem;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .input-group .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 2.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            cursor: text;
+        }
+        
+        .input-group .form-input:focus {
+            outline: none;
+            border-color: #ff4444;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1);
+            cursor: text;
+        }
+        
+        .input-group .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        /* Fix password toggle button positioning */
+        .input-group .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        
+        .input-group .password-toggle:hover {
+            color: #ff4444;
+        }
+        
+        /* Fix password input with toggle button */
+        .input-group.has-toggle .form-input {
+            padding-right: 3rem;
+        }
+        
+        .auth-button {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+        }
+        
+        .auth-button:hover {
+            background: linear-gradient(135deg, #cc0000, #990000);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 68, 68, 0.4);
+        }
     </style>
 </head>
 <body>
     
     <div class="auth-container">
-        <div class="auth-card">
-            <div class="auth-logo">
-                <i class="fas fa-user-shield"></i>
+        <div class="auth-box">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                
+                <span class="admin-badge">
+                    <i class="fas fa-shield-alt"></i> ADMIN ACCESS ONLY
+                </span>
+                
+                <h1 class="auth-title">Admin Panel</h1>
+                <p class="auth-subtitle">Secure administrator login</p>
             </div>
-            
-            <span class="admin-badge">
-                <i class="fas fa-shield-alt"></i> ADMIN ACCESS ONLY
-            </span>
-            
-            <h1 class="auth-title">Admin Panel</h1>
-            <p class="auth-subtitle">Secure administrator login</p>
             
             <div class="security-notice">
                 <i class="fas fa-exclamation-triangle"></i>
@@ -83,27 +162,29 @@
                 <div class="form-group">
                     <label for="email" class="form-label">Admin Email</label>
                     <div class="input-group">
-                        <i class="fas fa-envelope"></i>
+                        <i class="fas fa-envelope input-icon"></i>
                         <input 
                             type="email" 
                             id="email" 
                             class="form-input" 
                             placeholder="Enter admin email"
                             required
+                            autocomplete="email"
                         >
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="password" class="form-label">Admin Password</label>
-                    <div class="input-group">
-                        <i class="fas fa-lock"></i>
+                    <div class="input-group has-toggle">
+                        <i class="fas fa-lock input-icon"></i>
                         <input 
                             type="password" 
                             id="password" 
                             class="form-input" 
                             placeholder="Enter admin password"
                             required
+                            autocomplete="current-password"
                         >
                         <button type="button" class="password-toggle" onclick="togglePassword()">
                             <i class="fas fa-eye" id="toggleIcon"></i>
@@ -111,14 +192,16 @@
                     </div>
                 </div>
                 
-                <button type="submit" class="btn btn-primary btn-block" style="background: linear-gradient(135deg, #ff4444, #cc0000);">
+                <button type="submit" class="auth-button">
                     <i class="fas fa-sign-in-alt"></i> ADMIN LOGIN
                 </button>
             </form>
             
-            <p class="auth-footer" style="margin-top: var(--spacing-lg); color: var(--text-gray); font-size: 0.85rem;">
-                <i class="fas fa-lock"></i> Secured with enterprise-grade encryption
-            </p>
+            <div class="auth-footer">
+                <p style="margin-top: var(--spacing-lg); color: var(--text-gray); font-size: 0.85rem; text-align: center;">
+                    <i class="fas fa-lock"></i> Secured with enterprise-grade encryption
+                </p>
+            </div>
         </div>
     </div>
     
