@@ -1,45 +1,215 @@
 // ============================================
-// MAIN JAVASCRIPT FILE
+// MAIN JAVASCRIPT - UTILITIES & CONSTANTS
 // ============================================
 
-// Initialize AOS (Animate On Scroll)
-document.addEventListener('DOMContentLoaded', function() {
-    AOS.init({
-        duration: 1000,
-        once: true,
-        offset: 100
-    });
-});
+// Investment Plans Configuration
+const INVESTMENT_PLANS = [
+    {
+        id: 1,
+        name: 'Plan 01 - Starter',
+        amount: 5,
+        dailyProfit: 0.30,
+        totalReturn: 9,
+        duration: 30,
+        locked: false
+    },
+    {
+        id: 2,
+        name: 'Plan 02 - Basic',
+        amount: 12,
+        dailyProfit: 0.36,
+        totalReturn: 21.6,
+        duration: 60,
+        locked: false
+    },
+    {
+        id: 3,
+        name: 'Plan 03 - Standard',
+        amount: 30,
+        dailyProfit: 0.90,
+        totalReturn: 54,
+        duration: 60,
+        locked: false
+    },
+    {
+        id: 4,
+        name: 'Plan 04 - Premium',
+        amount: 50,
+        dailyProfit: 1.50,
+        totalReturn: 90,
+        duration: 60,
+        locked: false
+    },
+    {
+        id: 5,
+        name: 'Plan 05 - Gold (Locked)',
+        amount: 120,
+        dailyProfit: 7.20,
+        totalReturn: 216,
+        duration: 30,
+        locked: true
+    },
+    {
+        id: 6,
+        name: 'Plan 06 - Platinum (Locked)',
+        amount: 250,
+        dailyProfit: 7.50,
+        totalReturn: 450,
+        duration: 60,
+        locked: true
+    },
+    {
+        id: 7,
+        name: 'Plan 07 - Diamond (Locked)',
+        amount: 550,
+        dailyProfit: 16.50,
+        totalReturn: 990,
+        duration: 60,
+        locked: true
+    }
+];
 
-// ============================================
-// NAVBAR FUNCTIONALITY
-// ============================================
+// Platform Configuration
+const PLATFORM_CONFIG = {
+    registrationBonus: 0.50,
+    minWithdrawal: 5,
+    withdrawalTax: 0.05, // 5%
+    minDeposit: 5,
+    weekendOff: true, // Saturday & Sunday off
+    maxWithdrawalsPerMonth: 2,
+    firstWithdrawalDays: 10,
+    secondWithdrawalReferrals: 1
+};
+
+// Referral Commission Rates (4 levels)
+const REFERRAL_RATES = {
+    level1: 0.10, // 10%
+    level2: 0.05, // 5%
+    level3: 0.02, // 2%
+    level4: 0.01  // 1%
+};
+
+// Salary Plans
+const SALARY_PLANS = [
+    {
+        plan: 1,
+        minSales: 1000,
+        maxSales: 2499,
+        weeklySalary: 5
+    },
+    {
+        plan: 2,
+        minSales: 2500,
+        maxSales: 5999,
+        weeklySalary: 15
+    },
+    {
+        plan: 3,
+        minSales: 6000,
+        maxSales: Infinity,
+        weeklySalary: 50
+    }
+];
+
+// Check if today is weekend (Saturday or Sunday)
+function isWeekend() {
+    const day = new Date().getDay();
+    return day === 0 || day === 6; // 0 = Sunday, 6 = Saturday
+}
+
+// Format currency
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(amount);
+}
+
+// Format date
+function formatDate(date) {
+    return new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    }).format(date);
+}
+
+// Format date and time
+function formatDateTime(date) {
+    return new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    }).format(date);
+}
+
+// Show toast notification
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 300);
+    }, 3000);
+}
+
+// Show loading overlay
+function showLoading() {
+    const loading = document.createElement('div');
+    loading.id = 'loadingOverlay';
+    loading.className = 'loading-overlay';
+    loading.innerHTML = `
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    `;
+    document.body.appendChild(loading);
+}
+
+// Hide loading overlay
+function hideLoading() {
+    const loading = document.getElementById('loadingOverlay');
+    if (loading) {
+        document.body.removeChild(loading);
+    }
+}
 
 // Navbar scroll effect
-const navbar = document.getElementById('navbar');
-let lastScroll = 0;
-
 window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > 100) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
+    const navbar = document.getElementById('navbar');
+    if (navbar) {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
     }
-    
-    lastScroll = currentScroll;
 });
 
 // Mobile menu toggle
 const navbarToggle = document.getElementById('navbarToggle');
 const navbarMenu = document.getElementById('navbarMenu');
 
-if (navbarToggle) {
+if (navbarToggle && navbarMenu) {
     navbarToggle.addEventListener('click', () => {
         navbarMenu.classList.toggle('active');
         
-        // Change icon
         const icon = navbarToggle.querySelector('i');
         if (navbarMenu.classList.contains('active')) {
             icon.classList.remove('fa-bars');
@@ -59,124 +229,6 @@ if (navbarToggle) {
             icon.classList.add('fa-bars');
         }
     });
-    
-    // Close menu when clicking on a link
-    const navLinks = navbarMenu.querySelectorAll('a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            navbarMenu.classList.remove('active');
-            const icon = navbarToggle.querySelector('i');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-        });
-    });
-}
-
-// ============================================
-// SMOOTH SCROLL
-// ============================================
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
-
-// ============================================
-// LOADING ANIMATION
-// ============================================
-window.addEventListener('load', () => {
-    const loader = document.querySelector('.page-loader');
-    if (loader) {
-        loader.style.opacity = '0';
-        setTimeout(() => {
-            loader.style.display = 'none';
-        }, 500);
-    }
-});
-
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
-
-// Show toast notification
-function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.innerHTML = `
-        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-        <span>${message}</span>
-    `;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 100);
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
-    }, 3000);
-}
-
-// Show loading spinner
-function showLoading() {
-    const loader = document.createElement('div');
-    loader.id = 'page-loader';
-    loader.innerHTML = `
-        <div class="spinner-container">
-            <div class="spinner"></div>
-            <p>Loading...</p>
-        </div>
-    `;
-    document.body.appendChild(loader);
-}
-
-// Hide loading spinner
-function hideLoading() {
-    const loader = document.getElementById('page-loader');
-    if (loader) {
-        loader.remove();
-    }
-}
-
-// Format currency
-function formatCurrency(amount) {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    }).format(amount);
-}
-
-// Format date
-function formatDate(date) {
-    return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-    });
-}
-
-// Format datetime
-function formatDateTime(date) {
-    return new Date(date).toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
 }
 
 // Copy to clipboard
@@ -192,7 +244,6 @@ function copyToClipboard(text) {
     }
 }
 
-// Fallback copy method
 function fallbackCopyToClipboard(text) {
     const textArea = document.createElement('textarea');
     textArea.value = text;
@@ -211,223 +262,73 @@ function fallbackCopyToClipboard(text) {
     document.body.removeChild(textArea);
 }
 
+// Get plan by ID
+function getPlanById(planId) {
+    return INVESTMENT_PLANS.find(plan => plan.id === planId);
+}
+
+// Get salary plan by sales amount
+function getSalaryPlan(directSales) {
+    return SALARY_PLANS.find(plan => 
+        directSales >= plan.minSales && directSales <= plan.maxSales
+    );
+}
+
+// Calculate withdrawal tax
+function calculateWithdrawalTax(amount) {
+    return amount * PLATFORM_CONFIG.withdrawalTax;
+}
+
+// Calculate net withdrawal amount
+function calculateNetWithdrawal(amount) {
+    const tax = calculateWithdrawalTax(amount);
+    return amount - tax;
+}
+
 // Validate email
-function validateEmail(email) {
+function isValidEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
 
 // Validate password strength
 function validatePassword(password) {
-    // At least 8 characters, 1 number, 1 special character
-    const re = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
-    return re.test(password);
-}
-
-// Generate random string
-function generateRandomString(length = 8) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    const minLength = 6;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    
+    if (password.length < minLength) {
+        return { valid: false, message: 'Password must be at least 6 characters' };
     }
-    return result;
+    
+    if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
+        return { valid: false, message: 'Password must contain uppercase, lowercase, and numbers' };
+    }
+    
+    return { valid: true, message: 'Strong password' };
 }
 
-// Debounce function
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
+// Export for use in other files
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        INVESTMENT_PLANS,
+        PLATFORM_CONFIG,
+        REFERRAL_RATES,
+        SALARY_PLANS,
+        isWeekend,
+        formatCurrency,
+        formatDate,
+        formatDateTime,
+        showToast,
+        showLoading,
+        hideLoading,
+        copyToClipboard,
+        getPlanById,
+        getSalaryPlan,
+        calculateWithdrawalTax,
+        calculateNetWithdrawal,
+        isValidEmail,
+        validatePassword
     };
 }
-
-// ============================================
-// FORM VALIDATION
-// ============================================
-function validateForm(formId) {
-    const form = document.getElementById(formId);
-    if (!form) return false;
-    
-    const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
-    let isValid = true;
-    
-    inputs.forEach(input => {
-        if (!input.value.trim()) {
-            isValid = false;
-            input.classList.add('error');
-            showError(input, 'This field is required');
-        } else {
-            input.classList.remove('error');
-            removeError(input);
-        }
-        
-        // Email validation
-        if (input.type === 'email' && input.value.trim()) {
-            if (!validateEmail(input.value)) {
-                isValid = false;
-                input.classList.add('error');
-                showError(input, 'Please enter a valid email');
-            }
-        }
-        
-        // Password validation
-        if (input.type === 'password' && input.value.trim() && input.hasAttribute('data-validate')) {
-            if (!validatePassword(input.value)) {
-                isValid = false;
-                input.classList.add('error');
-                showError(input, 'Password must be at least 8 characters with 1 number and 1 special character');
-            }
-        }
-    });
-    
-    return isValid;
-}
-
-function showError(input, message) {
-    removeError(input);
-    const error = document.createElement('div');
-    error.className = 'error-message';
-    error.textContent = message;
-    input.parentElement.appendChild(error);
-}
-
-function removeError(input) {
-    const error = input.parentElement.querySelector('.error-message');
-    if (error) {
-        error.remove();
-    }
-}
-
-// ============================================
-// COUNTDOWN TIMER
-// ============================================
-function startCountdown(endDate, elementId) {
-    const element = document.getElementById(elementId);
-    if (!element) return;
-    
-    const timer = setInterval(() => {
-        const now = new Date().getTime();
-        const distance = new Date(endDate).getTime() - now;
-        
-        if (distance < 0) {
-            clearInterval(timer);
-            element.innerHTML = 'EXPIRED';
-            return;
-        }
-        
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
-        element.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }, 1000);
-}
-
-// ============================================
-// MODAL FUNCTIONALITY
-// ============================================
-function openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-}
-
-// Close modal on outside click
-window.addEventListener('click', (e) => {
-    if (e.target.classList.contains('modal')) {
-        e.target.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-});
-
-// ============================================
-// TABS FUNCTIONALITY
-// ============================================
-function initTabs() {
-    const tabButtons = document.querySelectorAll('.tab-button');
-    
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const tabGroup = button.closest('.tabs');
-            const tabId = button.getAttribute('data-tab');
-            
-            // Remove active class from all buttons and contents in this group
-            tabGroup.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-            tabGroup.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            // Add active class to clicked button and corresponding content
-            button.classList.add('active');
-            const content = tabGroup.querySelector(`#${tabId}`);
-            if (content) {
-                content.classList.add('active');
-            }
-        });
-    });
-}
-
-// Initialize tabs on page load
-document.addEventListener('DOMContentLoaded', initTabs);
-
-// ============================================
-// ACCORDION FUNCTIONALITY
-// ============================================
-function initAccordion() {
-    const accordionHeaders = document.querySelectorAll('.accordion-header');
-    
-    accordionHeaders.forEach(header => {
-        header.addEventListener('click', () => {
-            const accordionItem = header.parentElement;
-            const accordionContent = accordionItem.querySelector('.accordion-content');
-            const isActive = accordionItem.classList.contains('active');
-            
-            // Close all accordion items
-            document.querySelectorAll('.accordion-item').forEach(item => {
-                item.classList.remove('active');
-                item.querySelector('.accordion-content').style.maxHeight = null;
-            });
-            
-            // Open clicked item if it wasn't active
-            if (!isActive) {
-                accordionItem.classList.add('active');
-                accordionContent.style.maxHeight = accordionContent.scrollHeight + 'px';
-            }
-        });
-    });
-}
-
-// Initialize accordion on page load
-document.addEventListener('DOMContentLoaded', initAccordion);
-
-// ============================================
-// EXPORT FUNCTIONS
-// ============================================
-window.showToast = showToast;
-window.showLoading = showLoading;
-window.hideLoading = hideLoading;
-window.formatCurrency = formatCurrency;
-window.formatDate = formatDate;
-window.formatDateTime = formatDateTime;
-window.copyToClipboard = copyToClipboard;
-window.validateEmail = validateEmail;
-window.validatePassword = validatePassword;
-window.validateForm = validateForm;
-window.openModal = openModal;
-window.closeModal = closeModal;
-window.startCountdown = startCountdown;
