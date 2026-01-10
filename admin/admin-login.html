@@ -10,30 +10,80 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="css/admin.css">
     
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+        }
+        
+        .auth-card {
+            border: 2px solid #ff4444;
+            box-shadow: 0 0 30px rgba(255, 68, 68, 0.3);
+        }
+        
+        .auth-logo {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+        }
+        
+        .auth-title {
+            color: #ff4444;
+        }
+        
+        .admin-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid #ff4444;
+            border-radius: var(--radius-md);
+            color: #ff4444;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .security-notice {
+            background: rgba(255, 68, 68, 0.1);
+            border-left: 3px solid #ff4444;
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            border-radius: var(--radius-sm);
+        }
+        
+        .security-notice i {
+            color: #ff4444;
+            margin-right: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     
     <div class="auth-container">
-        <div class="auth-box">
-            <div class="auth-header">
-                <div class="auth-logo" style="color: #ff4444;">
-                    <i class="fas fa-user-shield"></i>
-                </div>
-                <h1 class="auth-title" style="background: linear-gradient(135deg, #ff4444, #ffaa00); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                    Admin Access
-                </h1>
-                <p class="auth-subtitle">Secure admin panel login</p>
+        <div class="auth-card">
+            <div class="auth-logo">
+                <i class="fas fa-user-shield"></i>
             </div>
             
-            <form id="adminLoginForm">
+            <span class="admin-badge">
+                <i class="fas fa-shield-alt"></i> ADMIN ACCESS ONLY
+            </span>
+            
+            <h1 class="auth-title">Admin Panel</h1>
+            <p class="auth-subtitle">Secure administrator login</p>
+            
+            <div class="security-notice">
+                <i class="fas fa-exclamation-triangle"></i>
+                <small>This area is restricted to authorized administrators only. All login attempts are logged.</small>
+            </div>
+            
+            <form id="adminLoginForm" class="auth-form">
                 <div class="form-group">
                     <label for="email" class="form-label">Admin Email</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-envelope input-icon"></i>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
                         <input 
                             type="email" 
                             id="email" 
@@ -45,102 +95,101 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-lock input-icon"></i>
+                    <label for="password" class="form-label">Admin Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
                         <input 
                             type="password" 
                             id="password" 
                             class="form-input" 
-                            placeholder="Enter password"
+                            placeholder="Enter admin password"
                             required
                         >
-                        <button type="button" class="password-toggle" onclick="togglePassword('password')">
-                            <i class="fas fa-eye"></i>
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <i class="fas fa-eye" id="toggleIcon"></i>
                         </button>
                     </div>
                 </div>
                 
-                <button type="submit" class="auth-button" id="loginBtn" style="background: linear-gradient(135deg, #ff4444, #ffaa00);">
-                    <i class="fas fa-sign-in-alt"></i> Admin Login
+                <button type="submit" class="btn btn-primary btn-block" style="background: linear-gradient(135deg, #ff4444, #cc0000);">
+                    <i class="fas fa-sign-in-alt"></i> ADMIN LOGIN
                 </button>
             </form>
             
-            <div class="auth-footer">
-                <a href="../login.html">← Back to User Login</a>
-            </div>
+            <p class="auth-footer" style="margin-top: var(--spacing-lg); color: var(--text-gray); font-size: 0.85rem;">
+                <i class="fas fa-lock"></i> Secured with enterprise-grade encryption
+            </p>
         </div>
     </div>
     
     <script src="../js/firebase-config.js"></script>
     <script src="../js/main.js"></script>
+    <script src="js/admin.js"></script>
     
     <script>
-        function togglePassword(inputId) {
-            const input = document.getElementById(inputId);
-            const button = input.nextElementSibling;
-            const icon = button.querySelector('i');
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
             
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
             } else {
-                input.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
             }
         }
         
-        const adminLoginForm = document.getElementById('adminLoginForm');
-        adminLoginForm.addEventListener('submit', async (e) => {
+        // Admin login form handler
+        document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const email = document.getElementById('email').value.trim();
+            const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
-            if (!email || !password) {
-                showToast('Please enter email and password', 'error');
-                return;
-            }
-            
-            const loginBtn = document.getElementById('loginBtn');
-            loginBtn.disabled = true;
-            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-            
             try {
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                showLoading();
+                
+                // Sign in with Firebase
+                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
                 const user = userCredential.user;
                 
+                // Check if user is admin
                 const userDoc = await db.collection('users').doc(user.uid).get();
                 const userData = userDoc.data();
                 
-                if (userData.role !== 'admin') {
+                if (userData && userData.role === 'admin') {
+                    showToast('Admin login successful!', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'admin-dashboard.html';
+                    }, 1000);
+                } else {
+                    // Not an admin - sign out immediately
+                    await firebase.auth().signOut();
                     showToast('Access denied. Admin privileges required.', 'error');
-                    await auth.signOut();
-                    loginBtn.disabled = false;
-                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Admin Login';
-                    return;
                 }
                 
-                showToast('Admin login successful!', 'success');
-                setTimeout(() => {
-                    window.location.href = 'admin-dashboard.html';
-                }, 1000);
+                hideLoading();
                 
             } catch (error) {
                 console.error('Admin login error:', error);
+                hideLoading();
+                
                 let errorMessage = 'Login failed. Please try again.';
                 
                 if (error.code === 'auth/user-not-found') {
-                    errorMessage = 'No account found with this email.';
+                    errorMessage = 'Admin account not found';
                 } else if (error.code === 'auth/wrong-password') {
-                    errorMessage = 'Incorrect password.';
+                    errorMessage = 'Invalid admin credentials';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Invalid email format';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage = 'Too many failed attempts. Try again later.';
                 }
                 
                 showToast(errorMessage, 'error');
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Admin Login';
             }
         });
     </script>
