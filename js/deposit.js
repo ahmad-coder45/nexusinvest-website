@@ -161,6 +161,16 @@ function showPaymentDetails(method) {
     detailsDiv.style.display = 'block';
 }
 
+// Convert file to base64
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+}
+
 // Handle deposit form submission
 const depositForm = document.getElementById('depositForm');
 if (depositForm) {
@@ -204,26 +214,24 @@ if (depositForm) {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
         
         try {
-            // Upload proof to Firebase Storage
-            const timestamp = Date.now();
-            const fileName = `${currentUser.uid}_${timestamp}_${proofFile.name}`;
-            const storageRef = storage.ref(`payment-proofs/${currentUser.uid}/${fileName}`);
+            // Convert image to base64 (temporary solution without Firebase Storage)
+            const proofBase64 = await fileToBase64(proofFile);
             
-            const uploadTask = await storageRef.put(proofFile);
-            const proofUrl = await uploadTask.ref.getDownloadURL();
-            
-            // Create deposit request
+            // Create deposit request with base64 image
             await db.collection('deposits').add({
                 userId: currentUser.uid,
                 amount: amount,
                 method: selectedMethod.charAt(0).toUpperCase() + selectedMethod.slice(1),
-                proofUrl: proofUrl,
+                proofBase64: proofBase64, // Store as base64 temporarily
+                proofFileName: proofFile.name,
+                proofFileType: proofFile.type,
                 status: 'pending',
                 rejectionReason: '',
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 approvedAt: null,
                 approvedBy: null,
-                receiptUrl: null
+                receiptUrl: null,
+                note: 'Payment proof stored as base64 (Firebase Storage not enabled)'
             });
             
             showToast('Deposit request submitted successfully! Waiting for admin approval.', 'success');
@@ -252,5 +260,16 @@ if (depositForm) {
     });
 }
 
+// Copy to clipboard function
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        showToast('Copied to clipboard!', 'success');
+    }).catch(err => {
+        console.error('Failed to copy:', err);
+        showToast('Failed to copy', 'error');
+    });
+}
+
 // Export function
 window.selectPaymentMethod = selectPaymentMethod;
+window.copyToClipboard = copyToClipboard;
