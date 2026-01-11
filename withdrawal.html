@@ -17,268 +17,293 @@
 </head>
 <body>
     
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <i class="fas fa-gem"></i>
-            <span>NEXUSINVEST</span>
-        </div>
-        
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item">
-                <i class="fas fa-home"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="my-investments.html" class="nav-item">
-                <i class="fas fa-chart-line"></i>
-                <span>My Investments</span>
-            </a>
-            <a href="plans.html" class="nav-item">
-                <i class="fas fa-box"></i>
-                <span>Investment Plans</span>
-            </a>
-            <a href="deposit.html" class="nav-item">
-                <i class="fas fa-wallet"></i>
-                <span>Deposit</span>
-            </a>
-            <a href="withdrawal.html" class="nav-item active">
-                <i class="fas fa-money-bill-wave"></i>
-                <span>Withdrawal</span>
-            </a>
-            <a href="transactions.html" class="nav-item">
-                <i class="fas fa-exchange-alt"></i>
-                <span>Transactions</span>
-            </a>
-            <a href="referrals.html" class="nav-item">
-                <i class="fas fa-users"></i>
-                <span>Referrals</span>
-            </a>
-            <a href="salary.html" class="nav-item">
-                <i class="fas fa-dollar-sign"></i>
-                <span>Salary</span>
-            </a>
-            <a href="profile.html" class="nav-item">
-                <i class="fas fa-user"></i>
-                <span>Profile</span>
-            </a>
-            <a href="#" class="nav-item" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
-            </a>
-        </nav>
-    </div>
-    
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <button class="menu-toggle" id="menuToggle">
-                <i class="fas fa-bars"></i>
-            </button>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="sidebar-logo">
+                    <i class="fas fa-gem"></i>
+                    <span>NEXUSINVEST</span>
+                </a>
+            </div>
             
-            <div class="top-bar-right">
-                <div class="user-info">
-                    <span id="userName">Loading...</span>
-                    <i class="fas fa-user-circle"></i>
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Main</div>
+                    <a href="dashboard.html" class="menu-item">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="my-investments.html" class="menu-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>My Investments</span>
+                    </a>
+                    <a href="plans.html" class="menu-item">
+                        <i class="fas fa-box"></i>
+                        <span>Investment Plans</span>
+                    </a>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1><i class="fas fa-money-bill-wave"></i> Withdrawal</h1>
-            <p>Request withdrawal from your balance</p>
-        </div>
-        
-        <!-- Important Notice - Withdrawal Hours -->
-        <div class="dashboard-card" style="background: linear-gradient(135deg, rgba(255, 68, 68, 0.1), rgba(255, 136, 0, 0.1)); border-left: 4px solid #ff4444; margin-bottom: var(--spacing-lg);">
-            <div style="display: flex; align-items: center; gap: var(--spacing-md);">
-                <div style="font-size: 2rem; color: #ff4444;">
-                    <i class="fas fa-clock"></i>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Financial</div>
+                    <a href="deposit.html" class="menu-item">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Deposit</span>
+                    </a>
+                    <a href="withdrawal.html" class="menu-item active">
+                        <i class="fas fa-minus-circle"></i>
+                        <span>Withdraw</span>
+                    </a>
+                    <a href="transactions.html" class="menu-item">
+                        <i class="fas fa-history"></i>
+                        <span>Transactions</span>
+                    </a>
                 </div>
-                <div>
-                    <h3 style="margin-bottom: 0.5rem; color: #ff4444;">⏰ Withdrawal Hours</h3>
-                    <p style="color: var(--text-gray); margin: 0;">
-                        <strong>Monday to Friday: 9:00 AM - 9:00 PM</strong><br>
-                        <small>Withdrawals are closed on weekends and outside business hours.</small>
-                    </p>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Earnings</div>
+                    <a href="referrals.html" class="menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Referrals</span>
+                    </a>
+                    <a href="salary.html" class="menu-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Salary Plans</span>
+                    </a>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Time Notice (Dynamic) -->
-        <div id="timeNotice"></div>
-        
-        <!-- Balance Overview -->
-        <div class="stats-grid" style="margin-bottom: var(--spacing-xl);">
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));">
-                    <i class="fas fa-wallet"></i>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Account</div>
+                    <a href="profile.html" class="menu-item">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#" onclick="logout()" class="menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
                 </div>
-                <div class="stat-info">
-                    <h3 id="userBalance">$0.00</h3>
-                    <p>Available Balance</p>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-minus-circle"></i> Withdrawal</h1>
+                    <p>Request withdrawal from your balance</p>
                 </div>
             </div>
             
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #ff4444, #cc0000);">
-                    <i class="fas fa-percentage"></i>
-                </div>
-                <div class="stat-info">
-                    <h3>5%</h3>
-                    <p>Withdrawal Tax</p>
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #ffd700, #ffaa00);">
-                    <i class="fas fa-calendar-check"></i>
-                </div>
-                <div class="stat-info">
-                    <h3 id="withdrawalsThisMonth">0</h3>
-                    <p>Withdrawals This Month</p>
+            <!-- Important Notice - Withdrawal Hours -->
+            <div class="dashboard-card" style="background: linear-gradient(135deg, rgba(255, 68, 68, 0.1), rgba(255, 136, 0, 0.1)); border-left: 4px solid #ff4444; margin-bottom: var(--spacing-lg);">
+                <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                    <div style="font-size: 2rem; color: #ff4444;">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 0.5rem; color: #ff4444;">⏰ Withdrawal Hours</h3>
+                        <p style="color: var(--text-gray); margin: 0;">
+                            <strong>Monday to Friday: 9:00 AM - 9:00 PM</strong><br>
+                            <small>Withdrawals are closed on weekends and outside business hours.</small>
+                        </p>
+                    </div>
                 </div>
             </div>
             
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, var(--neon-blue), #0066ff);">
-                    <i class="fas fa-info-circle"></i>
+            <!-- Time Notice (Dynamic) -->
+            <div id="timeNotice"></div>
+            
+            <!-- Balance Overview -->
+            <div class="dashboard-grid" style="margin-bottom: var(--spacing-xl);">
+                <div class="grid-col-3">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="userBalance">$0.00</h3>
+                            <p>Available Balance</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-info">
-                    <h3>2 Max</h3>
-                    <p>Per Month</p>
+                
+                <div class="grid-col-3">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #ff4444, #cc0000);">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>5%</h3>
+                            <p>Withdrawal Tax</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid-col-3">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #ffd700, #ffaa00);">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="withdrawalsThisMonth">0</h3>
+                            <p>Withdrawals This Month</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid-col-3">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, var(--neon-blue), #0066ff);">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>2 Max</h3>
+                            <p>Per Month</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Eligibility Status -->
-        <div id="eligibilityStatus" style="margin-bottom: var(--spacing-xl);"></div>
-        
-        <!-- Withdrawal Form -->
-        <div class="dashboard-card">
-            <h2 style="margin-bottom: var(--spacing-lg);">
-                <i class="fas fa-paper-plane"></i> Request Withdrawal
-            </h2>
             
-            <form id="withdrawalForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="amount" class="form-label">Withdrawal Amount ($)</label>
-                        <input 
-                            type="number" 
-                            id="amount" 
-                            class="form-input" 
-                            placeholder="Enter amount"
-                            min="5"
-                            step="0.01"
-                            required
-                        >
-                        <small class="form-hint">Minimum: $5</small>
+            <!-- Eligibility Status -->
+            <div id="eligibilityStatus" style="margin-bottom: var(--spacing-xl);"></div>
+            
+            <!-- Withdrawal Form -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-paper-plane"></i>
+                        Request Withdrawal
+                    </h3>
+                </div>
+                
+                <form id="withdrawalForm">
+                    <div class="dashboard-grid">
+                        <div class="grid-col-6">
+                            <div class="form-group">
+                                <label for="amount" class="form-label">Withdrawal Amount ($)</label>
+                                <input 
+                                    type="number" 
+                                    id="amount" 
+                                    class="form-input" 
+                                    placeholder="Enter amount"
+                                    min="5"
+                                    step="0.01"
+                                    required
+                                >
+                                <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 0.5rem;">
+                                    Minimum: $5
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid-col-6">
+                            <div class="form-group">
+                                <label for="method" class="form-label">Withdrawal Method</label>
+                                <select id="method" class="form-input" required>
+                                    <option value="">Select method</option>
+                                    <option value="binance">Binance (USDT)</option>
+                                    <option value="jazzcash">JazzCash</option>
+                                    <option value="easypaisa">EasyPaisa</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="method" class="form-label">Withdrawal Method</label>
-                        <select id="method" class="form-input" required>
-                            <option value="">Select method</option>
-                            <option value="binance">Binance (USDT)</option>
-                            <option value="jazzcash">JazzCash</option>
-                            <option value="easypaisa">EasyPaisa</option>
-                        </select>
+                        <label for="accountDetails" class="form-label">Account Details</label>
+                        <textarea 
+                            id="accountDetails" 
+                            class="form-input" 
+                            rows="3"
+                            placeholder="Enter your account details"
+                            required
+                        ></textarea>
+                        <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 0.5rem;">
+                            Enter your wallet address or mobile number
+                        </p>
                     </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="accountDetails" class="form-label">Account Details</label>
-                    <textarea 
-                        id="accountDetails" 
-                        class="form-input" 
-                        rows="3"
-                        placeholder="Enter your account details"
-                        required
-                    ></textarea>
-                    <small class="form-hint">Enter your wallet address or mobile number</small>
-                </div>
-                
-                <!-- Calculation Display -->
-                <div style="background: rgba(0, 255, 136, 0.05); border: 1px solid rgba(0, 255, 136, 0.2); border-radius: var(--radius-md); padding: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
-                    <h3 style="margin-bottom: var(--spacing-md); color: var(--neon-green);">
-                        <i class="fas fa-calculator"></i> Calculation
+                    
+                    <!-- Calculation Display -->
+                    <div style="background: rgba(0, 255, 136, 0.05); border: 1px solid rgba(0, 255, 136, 0.2); border-radius: var(--radius-md); padding: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
+                        <h3 style="margin-bottom: var(--spacing-md); color: var(--neon-green);">
+                            <i class="fas fa-calculator"></i> Calculation
+                        </h3>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Withdrawal Amount:</span>
+                                <strong id="displayAmount">$0.00</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; color: #ff4444;">
+                                <span>Tax (5%):</span>
+                                <strong id="displayTax">$0.00</strong>
+                            </div>
+                            <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 0.5rem; margin-top: 0.5rem;"></div>
+                            <div style="display: flex; justify-content: space-between; font-size: 1.2rem; color: var(--neon-green);">
+                                <span>You'll Receive:</span>
+                                <strong id="displayNet">$0.00</strong>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Important Notes -->
+                    <div style="background: rgba(255, 136, 0, 0.1); border-left: 3px solid #ff8800; padding: var(--spacing-md); border-radius: var(--radius-sm); margin-bottom: var(--spacing-lg);">
+                        <h4 style="margin-bottom: 0.5rem; color: #ff8800;">
+                            <i class="fas fa-exclamation-triangle"></i> Important Notes
+                        </h4>
+                        <ul style="margin: 0; padding-left: 1.5rem; color: var(--text-gray); font-size: 0.9rem;">
+                            <li>⏰ Withdrawals: <strong>Monday to Friday, 9 AM - 9 PM only</strong></li>
+                            <li>💰 Minimum withdrawal: <strong>$5</strong></li>
+                            <li>📅 Maximum <strong>2 withdrawals per month</strong></li>
+                            <li>⏳ First withdrawal available after <strong>10 days</strong></li>
+                            <li>💸 5% tax applied to all withdrawals</li>
+                            <li>⏱️ Processing time: <strong>24-48 hours</strong></li>
+                        </ul>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-paper-plane"></i> SUBMIT WITHDRAWAL
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Withdrawal History -->
+            <div class="dashboard-card" style="margin-top: var(--spacing-xl);">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-history"></i>
+                        Withdrawal History
                     </h3>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>Withdrawal Amount:</span>
-                            <strong id="displayAmount">$0.00</strong>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; color: #ff4444;">
-                            <span>Tax (5%):</span>
-                            <strong id="displayTax">$0.00</strong>
-                        </div>
-                        <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 0.5rem; margin-top: 0.5rem;"></div>
-                        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; color: var(--neon-green);">
-                            <span>You'll Receive:</span>
-                            <strong id="displayNet">$0.00</strong>
-                        </div>
+                </div>
+                <div id="withdrawalHistory">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading history...</p>
                     </div>
-                </div>
-                
-                <!-- Important Notes -->
-                <div style="background: rgba(255, 136, 0, 0.1); border-left: 3px solid #ff8800; padding: var(--spacing-md); border-radius: var(--radius-sm); margin-bottom: var(--spacing-lg);">
-                    <h4 style="margin-bottom: 0.5rem; color: #ff8800;">
-                        <i class="fas fa-exclamation-triangle"></i> Important Notes
-                    </h4>
-                    <ul style="margin: 0; padding-left: 1.5rem; color: var(--text-gray); font-size: 0.9rem;">
-                        <li>⏰ Withdrawals: <strong>Monday to Friday, 9 AM - 9 PM only</strong></li>
-                        <li>💰 Minimum withdrawal: <strong>$5</strong></li>
-                        <li>📅 Maximum <strong>2 withdrawals per month</strong></li>
-                        <li>⏳ First withdrawal available after <strong>10 days</strong></li>
-                        <li>👥 Second withdrawal requires <strong>1 active referral</strong></li>
-                        <li>💸 5% tax applied to all withdrawals</li>
-                        <li>⏱️ Processing time: <strong>24-48 hours</strong></li>
-                    </ul>
-                </div>
-                
-                <button type="submit" class="btn btn-primary btn-block">
-                    <i class="fas fa-paper-plane"></i> SUBMIT WITHDRAWAL
-                </button>
-            </form>
-        </div>
-        
-        <!-- Withdrawal History -->
-        <div class="dashboard-card" style="margin-top: var(--spacing-xl);">
-            <h2 style="margin-bottom: var(--spacing-lg);">
-                <i class="fas fa-history"></i> Withdrawal History
-            </h2>
-            <div id="withdrawalHistory">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Loading history...</p>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
+    
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
     
     <script src="js/firebase-config.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
     <script src="js/withdrawal.js"></script>
     
     <script>
-        // Menu toggle
-        document.getElementById('menuToggle').addEventListener('click', () => {
-            document.getElementById('sidebar').classList.toggle('active');
-        });
-        
-        // Logout function
-        function logout() {
-            firebase.auth().signOut().then(() => {
-                window.location.href = 'login.html';
-            });
-        }
-        
         // Update amount display
         document.getElementById('amount').addEventListener('input', (e) => {
             const amount = parseFloat(e.target.value) || 0;
-            document.getElementById('displayAmount').textContent = formatCurrency(amount);
+            const tax = amount * 0.05;
+            const net = amount - tax;
+            
+            document.getElementById('displayAmount').textContent = '$' + amount.toFixed(2);
+            document.getElementById('displayTax').textContent = '$' + tax.toFixed(2);
+            document.getElementById('displayNet').textContent = '$' + net.toFixed(2);
         });
     </script>
 </body>
