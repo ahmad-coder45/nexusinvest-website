@@ -107,7 +107,7 @@
                         <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-gray);">
                             <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 0.5rem;"></i> Minimum deposit: <strong>$5</strong></li>
                             <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 0.5rem;"></i> No deposit fees</li>
-                            <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 0.5rem;"></i> Instant credit after admin approval</li>
+                            <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 0.5rem;"></i> Instant credit after approval</li>
                             <li><i class="fas fa-check" style="color: var(--neon-green); margin-right: 0.5rem;"></i> 3 payment methods available</li>
                         </ul>
                     </div>
@@ -264,14 +264,6 @@
     </style>
     
     <script>
-        // Mobile sidebar toggle
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-        });
-        
         // File input change
         document.getElementById('proofFile').addEventListener('change', function(e) {
             const fileName = e.target.files[0]?.name;
