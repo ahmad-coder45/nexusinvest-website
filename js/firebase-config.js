@@ -26,8 +26,8 @@ const db = firebase.firestore();
 // Uncomment below when you upgrade to Blaze plan:
 // const storage = firebase.storage();
 
-// Enable offline persistence for better user experience
-db.enablePersistence()
+// Enable offline persistence (using new method to avoid deprecation warning)
+db.enablePersistence({ synchronizeTabs: true })
   .catch((err) => {
     if (err.code == 'failed-precondition') {
       console.log('Multiple tabs open, persistence can only be enabled in one tab at a time.');
