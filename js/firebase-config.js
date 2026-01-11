@@ -26,15 +26,17 @@ const db = firebase.firestore();
 // Uncomment below when you upgrade to Blaze plan:
 // const storage = firebase.storage();
 
-// Enable offline persistence (using new method to avoid deprecation warning)
-db.enablePersistence({ synchronizeTabs: true })
-  .catch((err) => {
-    if (err.code == 'failed-precondition') {
-      console.log('Multiple tabs open, persistence can only be enabled in one tab at a time.');
-    } else if (err.code == 'unimplemented') {
-      console.log('The current browser does not support persistence.');
-    }
-  });
+// Enable offline persistence using the new recommended method
+// This removes the deprecation warning
+try {
+  firebase.firestore().enablePersistence({ synchronizeTabs: true });
+} catch (err) {
+  if (err.code === 'failed-precondition') {
+    console.log('Multiple tabs open, persistence can only be enabled in one tab at a time.');
+  } else if (err.code === 'unimplemented') {
+    console.log('The current browser does not support persistence.');
+  }
+}
 
 // Export for use in other files
 window.auth = auth;
