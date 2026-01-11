@@ -135,7 +135,7 @@ if (registerForm) {
                 fullName: fullName,
                 phone: '',
                 balance: 0,
-                bonusBalance: 1, // $1 non-withdrawable bonus
+                bonusBalance: 0.5, // $0.50 non-withdrawable bonus (UPDATED)
                 totalInvested: 0,
                 totalEarnings: 0,
                 totalCommissions: 0,
@@ -165,7 +165,7 @@ if (registerForm) {
             await db.collection('transactions').add({
                 userId: user.uid,
                 type: 'bonus',
-                amount: 1,
+                amount: 0.5, // $0.50 bonus (UPDATED)
                 balanceBefore: 0,
                 balanceAfter: 0,
                 description: 'Registration bonus (Non-withdrawable)',
