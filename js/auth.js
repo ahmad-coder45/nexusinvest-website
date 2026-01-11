@@ -2,6 +2,40 @@
 // AUTHENTICATION JAVASCRIPT
 // ============================================
 
+// ============================================
+// VALIDATION FUNCTIONS
+// ============================================
+
+// Validate email format
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Validate password strength
+function validatePassword(password) {
+    // At least 8 characters, 1 number, 1 special character
+    const minLength = password.length >= 8;
+    const hasNumber = /\d/.test(password);
+    const hasSpecial = /[!@#$%^&*]/.test(password);
+    
+    return minLength && hasNumber && hasSpecial;
+}
+
+// Generate random string for referral codes
+function generateRandomString(length) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+}
+
+// ============================================
+// AUTH STATE OBSERVER
+// ============================================
+
 // Check if user is already logged in
 auth.onAuthStateChanged((user) => {
     if (user) {
@@ -355,7 +389,12 @@ async function checkAuth() {
     }
 }
 
-// Export functions
+// ============================================
+// EXPORT FUNCTIONS
+// ============================================
 window.logout = logout;
 window.getCurrentUser = getCurrentUser;
 window.checkAuth = checkAuth;
+window.validateEmail = validateEmail;
+window.validatePassword = validatePassword;
+window.generateRandomString = generateRandomString;
