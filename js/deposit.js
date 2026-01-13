@@ -25,8 +25,10 @@ async function loadPlatformSettings() {
             // Default settings if not configured
             platformSettings = {
                 binanceWallet: 'YOUR_BINANCE_WALLET_ADDRESS',
-                jazzcashNumber: '03XXXXXXXXX',
-                easypaisaNumber: '03XXXXXXXXX'
+                jazzcashIBAN: 'PK00XXXXXXXXXXXXXXXXXXXX',
+                easypaisaIBAN: 'PK00XXXXXXXXXXXXXXXXXXXX',
+                nayapayIBAN: 'PK00XXXXXXXXXXXXXXXXXXXX',
+                sadapayIBAN: 'PK00XXXXXXXXXXXXXXXXXXXX'
             };
         }
     } catch (error) {
@@ -68,19 +70,22 @@ function showPaymentDetails(method) {
                             Binance Wallet Address:
                         </label>
                         <div style="display: flex; gap: 0.5rem;">
-                            <input 
-                                type="text" 
-                                value="${platformSettings.binanceWallet}" 
-                                readonly 
-                                class="form-input" 
-                                id="binanceAddress"
-                                style="flex: 1;"
-                            >
+                            <div class="input-wrapper" style="flex: 1;">
+                                <i class="fas fa-wallet input-icon"></i>
+                                <input 
+                                    type="text" 
+                                    value="${platformSettings.binanceWallet}" 
+                                    readonly 
+                                    class="form-input" 
+                                    id="binanceAddress"
+                                    style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--white); font-weight: 500;"
+                                >
+                            </div>
                             <button 
                                 onclick="copyToClipboard('${platformSettings.binanceWallet}')" 
                                 class="btn btn-accent"
                             >
-                                <i class="fas fa-copy"></i> Copy
+                                <i class="fas fa-copy"></i> COPY
                             </button>
                         </div>
                     </div>
@@ -97,28 +102,31 @@ function showPaymentDetails(method) {
                 <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
                     <div>
                         <label style="font-size: 0.9rem; color: var(--text-gray); display: block; margin-bottom: 0.5rem;">
-                            JazzCash Number:
+                            JazzCash IBAN Number:
                         </label>
                         <div style="display: flex; gap: 0.5rem;">
-                            <input 
-                                type="text" 
-                                value="${platformSettings.jazzcashNumber}" 
-                                readonly 
-                                class="form-input" 
-                                id="jazzcashNumber"
-                                style="flex: 1;"
-                            >
+                            <div class="input-wrapper" style="flex: 1;">
+                                <i class="fas fa-university input-icon"></i>
+                                <input 
+                                    type="text" 
+                                    value="${platformSettings.jazzcashIBAN}" 
+                                    readonly 
+                                    class="form-input" 
+                                    id="jazzcashIBAN"
+                                    style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--white); font-weight: 500;"
+                                >
+                            </div>
                             <button 
-                                onclick="copyToClipboard('${platformSettings.jazzcashNumber}')" 
+                                onclick="copyToClipboard('${platformSettings.jazzcashIBAN}')" 
                                 class="btn btn-accent"
                             >
-                                <i class="fas fa-copy"></i> Copy
+                                <i class="fas fa-copy"></i> COPY
                             </button>
                         </div>
                     </div>
                     <div style="padding: var(--spacing-sm); background: rgba(255, 170, 0, 0.1); border-radius: var(--radius-sm); font-size: 0.85rem; color: #ffaa00;">
                         <i class="fas fa-exclamation-triangle"></i> 
-                        Send payment to this JazzCash number and upload the transaction screenshot below
+                        Send payment to this JazzCash IBAN and upload the transaction screenshot below
                     </div>
                 </div>
             `;
@@ -129,28 +137,101 @@ function showPaymentDetails(method) {
                 <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
                     <div>
                         <label style="font-size: 0.9rem; color: var(--text-gray); display: block; margin-bottom: 0.5rem;">
-                            EasyPaisa Number:
+                            EasyPaisa IBAN Number:
                         </label>
                         <div style="display: flex; gap: 0.5rem;">
-                            <input 
-                                type="text" 
-                                value="${platformSettings.easypaisaNumber}" 
-                                readonly 
-                                class="form-input" 
-                                id="easypaisaNumber"
-                                style="flex: 1;"
-                            >
+                            <div class="input-wrapper" style="flex: 1;">
+                                <i class="fas fa-university input-icon"></i>
+                                <input 
+                                    type="text" 
+                                    value="${platformSettings.easypaisaIBAN}" 
+                                    readonly 
+                                    class="form-input" 
+                                    id="easypaisaIBAN"
+                                    style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--white); font-weight: 500;"
+                                >
+                            </div>
                             <button 
-                                onclick="copyToClipboard('${platformSettings.easypaisaNumber}')" 
+                                onclick="copyToClipboard('${platformSettings.easypaisaIBAN}')" 
                                 class="btn btn-accent"
                             >
-                                <i class="fas fa-copy"></i> Copy
+                                <i class="fas fa-copy"></i> COPY
                             </button>
                         </div>
                     </div>
                     <div style="padding: var(--spacing-sm); background: rgba(255, 170, 0, 0.1); border-radius: var(--radius-sm); font-size: 0.85rem; color: #ffaa00;">
                         <i class="fas fa-exclamation-triangle"></i> 
-                        Send payment to this EasyPaisa number and upload the transaction screenshot below
+                        Send payment to this EasyPaisa IBAN and upload the transaction screenshot below
+                    </div>
+                </div>
+            `;
+            break;
+            
+        case 'nayapay':
+            html = `
+                <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                    <div>
+                        <label style="font-size: 0.9rem; color: var(--text-gray); display: block; margin-bottom: 0.5rem;">
+                            NayaPay IBAN Number:
+                        </label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <div class="input-wrapper" style="flex: 1;">
+                                <i class="fas fa-university input-icon"></i>
+                                <input 
+                                    type="text" 
+                                    value="${platformSettings.nayapayIBAN}" 
+                                    readonly 
+                                    class="form-input" 
+                                    id="nayapayIBAN"
+                                    style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--white); font-weight: 500;"
+                                >
+                            </div>
+                            <button 
+                                onclick="copyToClipboard('${platformSettings.nayapayIBAN}')" 
+                                class="btn btn-accent"
+                            >
+                                <i class="fas fa-copy"></i> COPY
+                            </button>
+                        </div>
+                    </div>
+                    <div style="padding: var(--spacing-sm); background: rgba(255, 170, 0, 0.1); border-radius: var(--radius-sm); font-size: 0.85rem; color: #ffaa00;">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        Send payment to this NayaPay IBAN and upload the transaction screenshot below
+                    </div>
+                </div>
+            `;
+            break;
+            
+        case 'sadapay':
+            html = `
+                <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                    <div>
+                        <label style="font-size: 0.9rem; color: var(--text-gray); display: block; margin-bottom: 0.5rem;">
+                            SadaPay IBAN Number:
+                        </label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <div class="input-wrapper" style="flex: 1;">
+                                <i class="fas fa-university input-icon"></i>
+                                <input 
+                                    type="text" 
+                                    value="${platformSettings.sadapayIBAN}" 
+                                    readonly 
+                                    class="form-input" 
+                                    id="sadapayIBAN"
+                                    style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--white); font-weight: 500;"
+                                >
+                            </div>
+                            <button 
+                                onclick="copyToClipboard('${platformSettings.sadapayIBAN}')" 
+                                class="btn btn-accent"
+                            >
+                                <i class="fas fa-copy"></i> COPY
+                            </button>
+                        </div>
+                    </div>
+                    <div style="padding: var(--spacing-sm); background: rgba(255, 170, 0, 0.1); border-radius: var(--radius-sm); font-size: 0.85rem; color: #ffaa00;">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        Send payment to this SadaPay IBAN and upload the transaction screenshot below
                     </div>
                 </div>
             `;
