@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - NexusInvest</title>
+    
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Admin Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="admin-dashboard.html" class="sidebar-logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>ADMIN PANEL</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Main</div>
+                    <a href="admin-dashboard.html" class="menu-item active">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="admin-settings.html" class="menu-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Platform Settings</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Management</div>
+                    <a href="admin-deposits.html" class="menu-item">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Deposits</span>
+                    </a>
+                    <a href="admin-withdrawals.html" class="menu-item">
+                        <i class="fas fa-minus-circle"></i>
+                        <span>Withdrawals</span>
+                    </a>
+                    <a href="admin-users.html" class="menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                    <a href="admin-investments.html" class="menu-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Investments</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Account</div>
+                    <a href="dashboard.html" class="menu-item">
+                        <i class="fas fa-user"></i>
+                        <span>My Account</span>
+                    </a>
+                    <a href="#" onclick="logout()" class="menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-shield-alt"></i> Admin Dashboard</h1>
+                    <p>Manage your platform</p>
+                </div>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="dashboard-grid">
+                <div class="grid-col-3">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #0066ff, #00ff88);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Total Users</div>
+                            <div class="stat-value" id="totalUsers">0</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid-col-3">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #00ff88, #0066ff);">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Pending Deposits</div>
+                            <div class="stat-value" id="pendingDeposits">0</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid-col-3">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #ff6b00, #ffd700);">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Pending Withdrawals</div>
+                            <div class="stat-value" id="pendingWithdrawals">0</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid-col-3">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #0066ff, #00d4ff);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Active Investments</div>
+                            <div class="stat-value" id="activeInvestments">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="dashboard-card" style="margin-top: var(--spacing-lg);">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-bolt"></i>
+                        Quick Actions
+                    </h3>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md);">
+                    <a href="admin-settings.html" class="btn btn-primary">
+                        <i class="fas fa-cog"></i> Platform Settings
+                    </a>
+                    <a href="admin-deposits.html" class="btn btn-accent">
+                        <i class="fas fa-plus-circle"></i> Manage Deposits
+                    </a>
+                    <a href="admin-withdrawals.html" class="btn btn-outline">
+                        <i class="fas fa-minus-circle"></i> Manage Withdrawals
+                    </a>
+                    <a href="admin-users.html" class="btn btn-outline">
+                        <i class="fas fa-users"></i> View Users
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/admin-auth.js"></script>
+    
+    <script>
+        // Load admin stats
+        async function loadAdminStats() {
+            try {
+                // Total users
+                const usersSnapshot = await db.collection('users').get();
+                document.getElementById('totalUsers').textContent = usersSnapshot.size;
+                
+                // Pending deposits
+                const depositsSnapshot = await db.collection('deposits')
+                    .where('status', '==', 'pending')
+                    .get();
+                document.getElementById('pendingDeposits').textContent = depositsSnapshot.size;
+                
+                // Pending withdrawals
+                const withdrawalsSnapshot = await db.collection('withdrawals')
+                    .where('status', '==', 'pending')
+                    .get();
+                document.getElementById('pendingWithdrawals').textContent = withdrawalsSnapshot.size;
+                
+                // Active investments
+                const investmentsSnapshot = await db.collection('investments')
+                    .where('status', '==', 'active')
+                    .get();
+                document.getElementById('activeInvestments').textContent = investmentsSnapshot.size;
+                
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAdminStats();
+        });
+    </script>
+</body>
+</html>
