@@ -14,6 +14,52 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <style>
+        /* Input styling like login/register page */
+        .input-wrapper {
+            position: relative;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            z-index: 1;
+        }
+        
+        .input-wrapper .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 2.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--white);
+            font-size: 1rem;
+            transition: var(--transition-fast);
+        }
+        
+        .input-wrapper .form-input:focus {
+            outline: none;
+            border-color: var(--electric-blue);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+        }
+        
+        .input-wrapper .form-input::placeholder {
+            color: var(--text-gray);
+        }
+        
+        .input-wrapper .form-input:read-only {
+            background: rgba(255, 255, 255, 0.03);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+    </style>
 </head>
 <body>
     
@@ -105,39 +151,50 @@
                         </div>
                         
                         <form id="profileForm">
+                            <!-- Full Name with Icon -->
                             <div class="form-group">
                                 <label for="fullName" class="form-label">Full Name</label>
-                                <input 
-                                    type="text" 
-                                    id="fullName" 
-                                    class="form-input" 
-                                    placeholder="Enter your full name"
-                                    required
-                                >
+                                <div class="input-wrapper">
+                                    <i class="fas fa-user input-icon"></i>
+                                    <input 
+                                        type="text" 
+                                        id="fullName" 
+                                        class="form-input" 
+                                        placeholder="Enter your full name"
+                                        required
+                                    >
+                                </div>
                             </div>
                             
+                            <!-- Email with Icon -->
                             <div class="form-group">
                                 <label for="email" class="form-label">Email Address</label>
-                                <input 
-                                    type="email" 
-                                    id="email" 
-                                    class="form-input" 
-                                    readonly
-                                    style="background: rgba(255, 255, 255, 0.05); cursor: not-allowed;"
-                                >
+                                <div class="input-wrapper">
+                                    <i class="fas fa-envelope input-icon"></i>
+                                    <input 
+                                        type="email" 
+                                        id="email" 
+                                        class="form-input" 
+                                        readonly
+                                    >
+                                </div>
                                 <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 0.5rem;">
                                     Email cannot be changed
                                 </p>
                             </div>
                             
+                            <!-- Phone with Icon -->
                             <div class="form-group">
                                 <label for="phone" class="form-label">Phone Number (Optional)</label>
-                                <input 
-                                    type="tel" 
-                                    id="phone" 
-                                    class="form-input" 
-                                    placeholder="Enter your phone number"
-                                >
+                                <div class="input-wrapper">
+                                    <i class="fas fa-phone input-icon"></i>
+                                    <input 
+                                        type="tel" 
+                                        id="phone" 
+                                        class="form-input" 
+                                        placeholder="Enter your phone number"
+                                    >
+                                </div>
                             </div>
                             
                             <button type="submit" class="btn btn-primary" id="updateBtn">
@@ -156,37 +213,49 @@
                         </div>
                         
                         <form id="passwordForm">
+                            <!-- Current Password with Icon -->
                             <div class="form-group">
                                 <label for="currentPassword" class="form-label">Current Password</label>
-                                <input 
-                                    type="password" 
-                                    id="currentPassword" 
-                                    class="form-input" 
-                                    placeholder="Enter current password"
-                                    required
-                                >
+                                <div class="input-wrapper">
+                                    <i class="fas fa-lock input-icon"></i>
+                                    <input 
+                                        type="password" 
+                                        id="currentPassword" 
+                                        class="form-input" 
+                                        placeholder="Enter current password"
+                                        required
+                                    >
+                                </div>
                             </div>
                             
+                            <!-- New Password with Icon -->
                             <div class="form-group">
                                 <label for="newPassword" class="form-label">New Password</label>
-                                <input 
-                                    type="password" 
-                                    id="newPassword" 
-                                    class="form-input" 
-                                    placeholder="Enter new password"
-                                    required
-                                >
+                                <div class="input-wrapper">
+                                    <i class="fas fa-key input-icon"></i>
+                                    <input 
+                                        type="password" 
+                                        id="newPassword" 
+                                        class="form-input" 
+                                        placeholder="Enter new password"
+                                        required
+                                    >
+                                </div>
                             </div>
                             
+                            <!-- Confirm Password with Icon -->
                             <div class="form-group">
                                 <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                                <input 
-                                    type="password" 
-                                    id="confirmPassword" 
-                                    class="form-input" 
-                                    placeholder="Confirm new password"
-                                    required
-                                >
+                                <div class="input-wrapper">
+                                    <i class="fas fa-check-circle input-icon"></i>
+                                    <input 
+                                        type="password" 
+                                        id="confirmPassword" 
+                                        class="form-input" 
+                                        placeholder="Confirm new password"
+                                        required
+                                    >
+                                </div>
                             </div>
                             
                             <button type="submit" class="btn btn-primary" id="passwordBtn">
