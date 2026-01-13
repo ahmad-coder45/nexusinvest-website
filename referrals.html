@@ -93,8 +93,8 @@
                 </div>
             </div>
             
-            <!-- Referral Link -->
-            <div class="dashboard-card" style="margin-bottom: var(--spacing-lg); background: var(--gradient-primary); border: none;">
+            <!-- Referral Link - FIXED VISIBILITY -->
+            <div class="dashboard-card" style="margin-bottom: var(--spacing-lg); background: rgba(0, 102, 255, 0.1); border: 1px solid rgba(0, 102, 255, 0.3);">
                 <h3 style="margin-bottom: var(--spacing-md); color: var(--white);">
                     <i class="fas fa-share-alt"></i> Your Referral Link
                 </h3>
@@ -104,12 +104,12 @@
                         id="referralLink" 
                         readonly 
                         class="form-input" 
-                        style="flex: 1; min-width: 300px; background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.3); color: var(--white);"
+                        style="flex: 1; min-width: 300px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--white); font-weight: 500;"
                     >
                     <button onclick="copyReferralLink()" class="btn btn-accent">
                         <i class="fas fa-copy"></i> Copy Link
                     </button>
-                    <button onclick="shareReferralLink()" class="btn" style="background: rgba(255, 255, 255, 0.2); color: var(--white);">
+                    <button onclick="shareReferralLink()" class="btn" style="background: rgba(0, 255, 136, 0.2); color: var(--neon-green); border: 1px solid var(--neon-green);">
                         <i class="fas fa-share"></i> Share
                     </button>
                 </div>
