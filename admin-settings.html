@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Settings - Admin</title>
+    
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <style>
+        .input-wrapper {
+            position: relative;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            z-index: 1;
+        }
+        
+        .input-wrapper .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 2.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--white);
+            font-size: 1rem;
+            transition: var(--transition-fast);
+        }
+        
+        .input-wrapper .form-input:focus {
+            outline: none;
+            border-color: var(--electric-blue);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Admin Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="admin-dashboard.html" class="sidebar-logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>ADMIN PANEL</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Main</div>
+                    <a href="admin-dashboard.html" class="menu-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="admin-settings.html" class="menu-item active">
+                        <i class="fas fa-cog"></i>
+                        <span>Platform Settings</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Management</div>
+                    <a href="admin-deposits.html" class="menu-item">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Deposits</span>
+                    </a>
+                    <a href="admin-withdrawals.html" class="menu-item">
+                        <i class="fas fa-minus-circle"></i>
+                        <span>Withdrawals</span>
+                    </a>
+                    <a href="admin-users.html" class="menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                    <a href="admin-investments.html" class="menu-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Investments</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Account</div>
+                    <a href="dashboard.html" class="menu-item">
+                        <i class="fas fa-user"></i>
+                        <span>My Account</span>
+                    </a>
+                    <a href="#" onclick="logout()" class="menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-cog"></i> Platform Settings</h1>
+                    <p>Configure payment methods and platform details</p>
+                </div>
+            </div>
+            
+            <!-- Payment Settings -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-credit-card"></i>
+                        Payment Method Details
+                    </h3>
+                    <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: 0.5rem;">
+                        Configure your payment receiving accounts. Users will send deposits to these accounts.
+                    </p>
+                </div>
+                
+                <form id="settingsForm">
+                    <!-- Binance Wallet -->
+                    <div class="form-group">
+                        <label for="binanceWallet" class="form-label">
+                            <i class="fab fa-bitcoin" style="color: #F3BA2F;"></i> Binance Wallet Address
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-wallet input-icon"></i>
+                            <input 
+                                type="text" 
+                                id="binanceWallet" 
+                                class="form-input" 
+                                placeholder="Enter your Binance wallet address"
+                            >
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 0.5rem;">
+                            Your cryptocurrency wallet address for receiving Binance payments
+                        </p>
+                    </div>
+                    
+                    <!-- JazzCash IBAN -->
+                    <div class="form-group">
+                        <label for="jazzcashIBAN" class="form-label">
+                            <i class="fas fa-mobile-alt" style="color: #FF6B00;"></i> JazzCash IBAN Number
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-university input-icon"></i>
+                            <input 
+                                type="text" 
+                                id="jazzcashIBAN" 
+                                class="form-input" 
+                                placeholder="PK00XXXXXXXXXXXXXXXXXXXX"
+                                maxlength="24"
+                            >
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 0.5rem;">
+                            Your JazzCash account IBAN (24 characters starting with PK)
+                        </p>
+                    </div>
+                    
+                    <!-- EasyPaisa IBAN -->
+                    <div class="form-group">
+                        <label for="easypaisaIBAN" class="form-label">
+                            <i class="fas fa-wallet" style="color: #00A859;"></i> EasyPaisa IBAN Number
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-university input-icon"></i>
+                            <input 
+                                type="text" 
+                                id="easypaisaIBAN" 
+                                class="form-input" 
+                                placeholder="PK00XXXXXXXXXXXXXXXXXXXX"
+                                maxlength="24"
+                            >
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 0.5rem;">
+                            Your EasyPaisa account IBAN (24 characters starting with PK)
+                        </p>
+                    </div>
+                    
+                    <!-- NayaPay IBAN -->
+                    <div class="form-group">
+                        <label for="nayapayIBAN" class="form-label">
+                            <i class="fas fa-university" style="color: #00D4FF;"></i> NayaPay IBAN Number
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-university input-icon"></i>
+                            <input 
+                                type="text" 
+                                id="nayapayIBAN" 
+                                class="form-input" 
+                                placeholder="PK00XXXXXXXXXXXXXXXXXXXX"
+                                maxlength="24"
+                            >
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 0.5rem;">
+                            Your NayaPay account IBAN (24 characters starting with PK)
+                        </p>
+                    </div>
+                    
+                    <!-- SadaPay IBAN -->
+                    <div class="form-group">
+                        <label for="sadapayIBAN" class="form-label">
+                            <i class="fas fa-credit-card" style="color: #7C3AED;"></i> SadaPay IBAN Number
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-university input-icon"></i>
+                            <input 
+                                type="text" 
+                                id="sadapayIBAN" 
+                                class="form-input" 
+                                placeholder="PK00XXXXXXXXXXXXXXXXXXXX"
+                                maxlength="24"
+                            >
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 0.5rem;">
+                            Your SadaPay account IBAN (24 characters starting with PK)
+                        </p>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="saveBtn" style="width: 100%;">
+                        <i class="fas fa-save"></i> Save Settings
+                    </button>
+                </form>
+            </div>
+            
+            <!-- How to Get IBAN Guide -->
+            <div class="dashboard-card" style="margin-top: var(--spacing-lg); background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 255, 136, 0.1)); border: 1px solid rgba(0, 102, 255, 0.3);">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-question-circle"></i>
+                        How to Get Your IBAN Number
+                    </h3>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md);">
+                    <div style="padding: var(--spacing-md); background: rgba(0, 0, 0, 0.2); border-radius: var(--radius-md);">
+                        <h4 style="color: #FF6B00; margin-bottom: var(--spacing-sm);">
+                            <i class="fas fa-mobile-alt"></i> JazzCash
+                        </h4>
+                        <ol style="font-size: 0.9rem; color: var(--text-gray); padding-left: 1.5rem;">
+                            <li>Open JazzCash app</li>
+                            <li>Go to "My Account"</li>
+                            <li>Tap "Account Details"</li>
+                            <li>Copy IBAN number</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="padding: var(--spacing-md); background: rgba(0, 0, 0, 0.2); border-radius: var(--radius-md);">
+                        <h4 style="color: #00A859; margin-bottom: var(--spacing-sm);">
+                            <i class="fas fa-wallet"></i> EasyPaisa
+                        </h4>
+                        <ol style="font-size: 0.9rem; color: var(--text-gray); padding-left: 1.5rem;">
+                            <li>Open EasyPaisa app</li>
+                            <li>Go to "My Account"</li>
+                            <li>Tap "Account Details"</li>
+                            <li>Copy IBAN number</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="padding: var(--spacing-md); background: rgba(0, 0, 0, 0.2); border-radius: var(--radius-md);">
+                        <h4 style="color: #00D4FF; margin-bottom: var(--spacing-sm);">
+                            <i class="fas fa-university"></i> NayaPay
+                        </h4>
+                        <ol style="font-size: 0.9rem; color: var(--text-gray); padding-left: 1.5rem;">
+                            <li>Open NayaPay app</li>
+                            <li>Go to "Account"</li>
+                            <li>Tap "Account Details"</li>
+                            <li>Copy IBAN number</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="padding: var(--spacing-md); background: rgba(0, 0, 0, 0.2); border-radius: var(--radius-md);">
+                        <h4 style="color: #7C3AED; margin-bottom: var(--spacing-sm);">
+                            <i class="fas fa-credit-card"></i> SadaPay
+                        </h4>
+                        <ol style="font-size: 0.9rem; color: var(--text-gray); padding-left: 1.5rem;">
+                            <li>Open SadaPay app</li>
+                            <li>Go to "Account"</li>
+                            <li>Tap "Account Details"</li>
+                            <li>Copy IBAN number</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/admin-auth.js"></script>
+    
+    <script>
+        // Load current settings
+        async function loadSettings() {
+            try {
+                const settingsDoc = await db.collection('settings').doc('platform_settings').get();
+                
+                if (settingsDoc.exists) {
+                    const settings = settingsDoc.data();
+                    
+                    document.getElementById('binanceWallet').value = settings.binanceWallet || '';
+                    document.getElementById('jazzcashIBAN').value = settings.jazzcashIBAN || '';
+                    document.getElementById('easypaisaIBAN').value = settings.easypaisaIBAN || '';
+                    document.getElementById('nayapayIBAN').value = settings.nayapayIBAN || '';
+                    document.getElementById('sadapayIBAN').value = settings.sadapayIBAN || '';
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        }
+        
+        // Save settings
+        const settingsForm = document.getElementById('settingsForm');
+        if (settingsForm) {
+            settingsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const saveBtn = document.getElementById('saveBtn');
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                
+                try {
+                    const settings = {
+                        binanceWallet: document.getElementById('binanceWallet').value.trim(),
+                        jazzcashIBAN: document.getElementById('jazzcashIBAN').value.trim().toUpperCase(),
+                        easypaisaIBAN: document.getElementById('easypaisaIBAN').value.trim().toUpperCase(),
+                        nayapayIBAN: document.getElementById('nayapayIBAN').value.trim().toUpperCase(),
+                        sadapayIBAN: document.getElementById('sadapayIBAN').value.trim().toUpperCase(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    
+                    // Validate IBAN format (should start with PK and be 24 characters)
+                    const ibanFields = ['jazzcashIBAN', 'easypaisaIBAN', 'nayapayIBAN', 'sadapayIBAN'];
+                    for (const field of ibanFields) {
+                        const iban = settings[field];
+                        if (iban && (!iban.startsWith('PK') || iban.length !== 24)) {
+                            showToast(`Invalid ${field.replace('IBAN', '')} IBAN format. Must start with PK and be 24 characters.`, 'error');
+                            saveBtn.disabled = false;
+                            saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Settings';
+                            return;
+                        }
+                    }
+                    
+                    await db.collection('settings').doc('platform_settings').set(settings, { merge: true });
+                    
+                    showToast('Settings saved successfully!', 'success');
+                    
+                } catch (error) {
+                    console.error('Error saving settings:', error);
+                    showToast('Failed to save settings. Please try again.', 'error');
+                }
+                
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Settings';
+            });
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+        });
+    </script>
+</body>
+</html>
