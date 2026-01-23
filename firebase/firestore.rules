@@ -18,10 +18,10 @@ service cloud.firestore {
       return request.auth.uid == userId;
     }
     
-    // Users collection
+    // Users collection - FIXED: Allow creation during registration
     match /users/{userId} {
       allow read: if isAuthenticated() && (isOwner(userId) || isAdmin());
-      allow create: if isAuthenticated();
+      allow create: if request.auth != null && request.auth.uid == userId;
       allow update: if isAuthenticated() && (isOwner(userId) || isAdmin());
       allow delete: if isAdmin();
     }
@@ -71,7 +71,7 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
     
-    // Transactions collection - FIXED: Allow authenticated users to create transactions
+    // Transactions collection - Allow authenticated users to create their own transactions
     match /transactions/{transactionId} {
       allow read: if isAuthenticated() && 
                      (resource.data.userId == request.auth.uid || isAdmin());
