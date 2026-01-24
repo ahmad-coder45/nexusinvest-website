@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Management - NexusInvest Admin</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/admin-variables.css">
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+    
+    <style>
+        .salary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .salary-stat-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+        }
+        
+        .salary-stat-card h3 {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 0.5rem;
+        }
+        
+        .salary-stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 0.5rem;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-process-all {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        
+        .btn-process-all:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 102, 255, 0.3);
+        }
+        
+        .btn-export {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--neon-green);
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--neon-green);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        
+        .btn-export:hover {
+            background: rgba(0, 255, 136, 0.2);
+        }
+        
+        .salary-table {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .table-header h2 {
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: rgba(0, 102, 255, 0.05);
+        }
+        
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-gray);
+        }
+        
+        tr:hover {
+            background: rgba(0, 102, 255, 0.05);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: var(--text-light);
+        }
+        
+        .user-email {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+        }
+        
+        .plan-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .plan-0 { background: rgba(128, 128, 128, 0.1); color: #888; }
+        .plan-1 { background: rgba(0, 102, 255, 0.1); color: var(--electric-blue); }
+        .plan-2 { background: rgba(138, 43, 226, 0.1); color: var(--purple); }
+        .plan-3 { background: rgba(255, 193, 7, 0.1); color: #FFC107; }
+        
+        .amount {
+            font-weight: 600;
+            color: var(--neon-green);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: rgba(255, 193, 7, 0.1);
+            color: #FFC107;
+        }
+        
+        .status-paid {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--neon-green);
+        }
+        
+        .status-failed {
+            background: rgba(255, 59, 48, 0.1);
+            color: #FF3B30;
+        }
+        
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-pay {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        
+        .btn-pay:hover {
+            background: rgba(0, 255, 136, 0.2);
+        }
+        
+        .btn-view {
+            background: rgba(0, 102, 255, 0.1);
+            color: var(--electric-blue);
+            border: 1px solid var(--electric-blue);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        
+        .btn-view:hover {
+            background: rgba(0, 102, 255, 0.2);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-gray);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-gray);
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(0, 102, 255, 0.1);
+            border-top-color: var(--electric-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="admin-logo">
+                    <i class="fas fa-shield-halved"></i>
+                    <span>NexusInvest Admin</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Main</div>
+                    <a href="admin-dashboard.html" class="menu-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="users-management.html" class="menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Transactions</div>
+                    <a href="pending-deposits.html" class="menu-item">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>Deposits</span>
+                    </a>
+                    <a href="pending-withdrawals.html" class="menu-item">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Withdrawals</span>
+                    </a>
+                    <a href="all-investments.html" class="menu-item">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Investments</span>
+                    </a>
+                    <a href="salary-management.html" class="menu-item active">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Salaries</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Settings</div>
+                    <a href="../admin-settings.html" class="menu-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                    <a href="#" class="menu-item" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="admin-header">
+                <div class="header-left">
+                    <h1>Salary Management</h1>
+                    <p>Process and manage user salary payments</p>
+                </div>
+                <div class="header-right">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <div class="admin-user">
+                        <div class="user-avatar">A</div>
+                        <div class="user-info">
+                            <div class="user-name">Admin</div>
+                            <div class="user-role">Administrator</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Salary Statistics -->
+            <div class="salary-stats">
+                <div class="salary-stat-card">
+                    <h3>Total Pending</h3>
+                    <div class="value" id="totalPending">$0.00</div>
+                </div>
+                <div class="salary-stat-card">
+                    <h3>This Month Paid</h3>
+                    <div class="value" id="monthPaid">$0.00</div>
+                </div>
+                <div class="salary-stat-card">
+                    <h3>Eligible Users</h3>
+                    <div class="value" id="eligibleUsers">0</div>
+                </div>
+                <div class="salary-stat-card">
+                    <h3>Total This Month</h3>
+                    <div class="value" id="totalMonth">$0.00</div>
+                </div>
+            </div>
+            
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Salary Plan</label>
+                    <select id="filterPlan">
+                        <option value="all">All Plans</option>
+                        <option value="0">No Plan</option>
+                        <option value="1">Plan 1 ($100/month)</option>
+                        <option value="2">Plan 2 ($200/month)</option>
+                        <option value="3">Plan 3 ($300/month)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Status</label>
+                    <select id="filterStatus">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="paid">Paid</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Search User</label>
+                    <input type="text" id="searchUser" placeholder="Name or email...">
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn-process-all" id="processAllBtn">
+                    <i class="fas fa-check-double"></i> Process All Pending
+                </button>
+                <button class="btn-export" id="exportBtn">
+                    <i class="fas fa-download"></i> Export Report
+                </button>
+            </div>
+            
+            <!-- Salary Table -->
+            <div class="salary-table">
+                <div class="table-header">
+                    <h2>
+                        <i class="fas fa-money-bill-wave"></i>
+                        Salary Payments
+                    </h2>
+                </div>
+                
+                <div id="loadingState" class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading salary data...</p>
+                </div>
+                
+                <div id="tableContent" style="display: none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Plan</th>
+                                <th>Direct Sales</th>
+                                <th>Amount</th>
+                                <th>Last Payment</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salaryTableBody">
+                            <!-- Data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <h3>No Salary Data</h3>
+                    <p>No users are eligible for salary payments yet.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Scripts -->
+    <script src="../js/firebase-config.js"></script>
+    <script src="js/admin-auth.js"></script>
+    <script src="js/salary-management.js"></script>
+</body>
+</html>
