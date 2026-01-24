@@ -170,15 +170,15 @@
 }
 
 .user-avatar {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: var(--gradient-primary);
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .user-info {
@@ -196,11 +196,11 @@
     color: var(--text-gray);
 }
 
-/* Stats Grid */
+/* Stats Grid - REDUCED SIZE */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--spacing-lg);
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--spacing-md);
     margin-bottom: var(--spacing-xl);
 }
 
@@ -208,30 +208,30 @@
     background: var(--card-bg);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
     transition: var(--transition-normal);
 }
 
 .stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 102, 255, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 102, 255, 0.2);
 }
 
 .stat-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
 }
 
 .stat-icon {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 }
 
 .stat-icon.primary {
@@ -255,27 +255,163 @@
 }
 
 .stat-body {
-    margin-top: var(--spacing-md);
+    margin-top: var(--spacing-sm);
 }
 
 .stat-label {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--text-gray);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
 .stat-value {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 700;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+/* Salary Stats - COMPACT VERSION */
+.salary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.salary-stat-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+}
+
+.salary-stat-card h3 {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    margin-bottom: 0.25rem;
+}
+
+.salary-stat-card .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Filters - IMPROVED STYLING */
+.filters {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-gray);
     margin-bottom: 0.5rem;
 }
 
+.filter-group select,
+.filter-group input {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 102, 255, 0.3);
+    border-radius: var(--radius-md);
+    color: var(--text-light);
+    font-size: 0.9rem;
+    transition: var(--transition-fast);
+    cursor: pointer;
+}
+
+.filter-group select:hover,
+.filter-group input:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(0, 102, 255, 0.5);
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--electric-blue);
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+}
+
+/* Dropdown Options Styling */
+.filter-group select option {
+    background: var(--secondary-black);
+    color: var(--text-light);
+    padding: 0.5rem;
+}
+
+.filter-group select option:hover {
+    background: rgba(0, 102, 255, 0.2);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.btn-process-all {
+    background: var(--gradient-primary);
+    color: var(--white);
+    padding: 0.65rem 1.25rem;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-process-all:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 102, 255, 0.3);
+}
+
+.btn-export {
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--neon-green);
+    padding: 0.65rem 1.25rem;
+    border: 1px solid var(--neon-green);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-export:hover {
+    background: rgba(0, 255, 136, 0.2);
+    transform: translateY(-2px);
+}
+
 /* Card */
-.card {
+.card,
+.salary-table {
     background: var(--card-bg);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-lg);
@@ -283,7 +419,8 @@
     margin-bottom: var(--spacing-lg);
 }
 
-.card-header {
+.card-header,
+.table-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -292,15 +429,17 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.card-title {
-    font-size: 1.25rem;
+.card-title,
+.table-header h2 {
+    font-size: 1.15rem;
     font-weight: 600;
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
 }
 
-.card-title i {
+.card-title i,
+.table-header h2 i {
     color: var(--electric-blue);
 }
 
@@ -315,47 +454,97 @@ thead {
 }
 
 th {
-    padding: 1rem;
+    padding: 0.85rem;
     text-align: left;
     font-weight: 600;
     color: var(--text-light);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 td {
-    padding: 1rem;
+    padding: 0.85rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     color: var(--text-gray);
+    font-size: 0.9rem;
 }
 
 tr:hover {
     background: rgba(0, 102, 255, 0.05);
 }
 
-/* Badges */
-.status-badge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-sm);
+/* User Info in Table */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.user-email {
     font-size: 0.8rem;
+    color: var(--text-gray);
+}
+
+/* Plan Badges */
+.plan-badge {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
     font-weight: 600;
 }
 
-.status-badge.pending {
+.plan-0 { background: rgba(128, 128, 128, 0.1); color: #888; }
+.plan-1 { background: rgba(0, 102, 255, 0.1); color: var(--electric-blue); }
+.plan-2 { background: rgba(138, 43, 226, 0.1); color: var(--purple); }
+.plan-3 { background: rgba(255, 193, 7, 0.1); color: #FFC107; }
+
+/* Amount */
+.amount {
+    font-weight: 600;
+    color: var(--neon-green);
+    font-size: 0.95rem;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-badge.pending,
+.status-badge.status-pending {
     background: rgba(255, 193, 7, 0.1);
     color: #FFC107;
 }
 
 .status-badge.approved,
-.status-badge.active {
+.status-badge.active,
+.status-badge.paid,
+.status-badge.status-paid {
     background: rgba(0, 255, 136, 0.1);
     color: var(--neon-green);
 }
 
 .status-badge.rejected,
-.status-badge.cancelled {
+.status-badge.cancelled,
+.status-badge.failed,
+.status-badge.status-failed {
     background: rgba(255, 59, 48, 0.1);
     color: #FF3B30;
 }
@@ -365,9 +554,51 @@ tr:hover {
     color: var(--electric-blue);
 }
 
+/* Action Buttons in Table */
+.action-btns {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-pay,
+.btn-view {
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.btn-pay {
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--neon-green);
+    border: 1px solid var(--neon-green);
+}
+
+.btn-pay:hover {
+    background: rgba(0, 255, 136, 0.2);
+    transform: translateY(-1px);
+}
+
+.btn-view {
+    background: rgba(0, 102, 255, 0.1);
+    color: var(--electric-blue);
+    border: 1px solid var(--electric-blue);
+}
+
+.btn-view:hover {
+    background: rgba(0, 102, 255, 0.2);
+    transform: translateY(-1px);
+}
+
 /* Buttons */
 .btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.65rem 1.25rem;
     border: none;
     border-radius: var(--radius-md);
     font-weight: 600;
@@ -376,6 +607,7 @@ tr:hover {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    font-size: 0.9rem;
 }
 
 .btn-primary {
@@ -421,18 +653,18 @@ tr:hover {
 /* Empty State */
 .empty-state {
     text-align: center;
-    padding: 3rem;
+    padding: 2.5rem;
     color: var(--text-gray);
 }
 
 .empty-state i {
-    font-size: 4rem;
+    font-size: 3.5rem;
     color: rgba(255, 255, 255, 0.1);
     margin-bottom: 1rem;
 }
 
 .empty-state h3 {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     margin-bottom: var(--spacing-sm);
     color: var(--text-light);
 }
@@ -440,13 +672,13 @@ tr:hover {
 /* Loading */
 .loading {
     text-align: center;
-    padding: 3rem;
+    padding: 2.5rem;
     color: var(--text-gray);
 }
 
 .spinner {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border: 4px solid rgba(0, 102, 255, 0.1);
     border-top-color: var(--electric-blue);
     border-radius: 50%;
@@ -477,6 +709,7 @@ tr:hover {
     .admin-header {
         flex-direction: column;
         align-items: flex-start;
+        gap: var(--spacing-md);
     }
     
     .header-right {
@@ -484,7 +717,24 @@ tr:hover {
         justify-content: space-between;
     }
     
-    .stats-grid {
+    .stats-grid,
+    .salary-stats {
         grid-template-columns: 1fr;
+    }
+    
+    .filters {
+        flex-direction: column;
+    }
+    
+    .filter-group {
+        min-width: 100%;
+    }
+    
+    table {
+        font-size: 0.8rem;
+    }
+    
+    th, td {
+        padding: 0.65rem 0.5rem;
     }
 }
