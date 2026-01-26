@@ -84,6 +84,31 @@
                 grid-template-columns: repeat(4, 1fr);
             }
         }
+        
+        /* PKR Conversion Hint */
+        .pkr-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--neon-green);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        
+        .pkr-hint:hover {
+            color: var(--electric-blue);
+        }
+        
+        .pkr-hint i {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
     </style>
 </head>
 <body>
@@ -100,13 +125,13 @@
             
             <nav class="sidebar-menu">
                 <div class="menu-section">
-                    <div class="menu-title">Main</div>
+                    <div class="menu-title">MAIN</div>
                     <a href="dashboard.html" class="menu-item">
-                        <i class="fas fa-home"></i>
+                        <i class="fas fa-chart-line"></i>
                         <span>Dashboard</span>
                     </a>
                     <a href="my-investments.html" class="menu-item">
-                        <i class="fas fa-chart-line"></i>
+                        <i class="fas fa-chart-pie"></i>
                         <span>My Investments</span>
                     </a>
                     <a href="plans.html" class="menu-item">
@@ -116,7 +141,7 @@
                 </div>
                 
                 <div class="menu-section">
-                    <div class="menu-title">Financial</div>
+                    <div class="menu-title">FINANCIAL</div>
                     <a href="deposit.html" class="menu-item">
                         <i class="fas fa-plus-circle"></i>
                         <span>Deposit</span>
@@ -126,13 +151,13 @@
                         <span>Withdraw</span>
                     </a>
                     <a href="transactions.html" class="menu-item">
-                        <i class="fas fa-history"></i>
+                        <i class="fas fa-exchange-alt"></i>
                         <span>Transactions</span>
                     </a>
                 </div>
                 
                 <div class="menu-section">
-                    <div class="menu-title">Earnings</div>
+                    <div class="menu-title">EARNINGS</div>
                     <a href="referrals.html" class="menu-item">
                         <i class="fas fa-users"></i>
                         <span>Referrals</span>
@@ -144,12 +169,12 @@
                 </div>
                 
                 <div class="menu-section">
-                    <div class="menu-title">Account</div>
+                    <div class="menu-title">ACCOUNT</div>
                     <a href="profile.html" class="menu-item">
                         <i class="fas fa-user"></i>
                         <span>Profile</span>
                     </a>
-                    <a href="#" onclick="logout()" class="menu-item">
+                    <a href="#" class="menu-item" id="logoutBtn">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Logout</span>
                     </a>
@@ -159,40 +184,36 @@
         
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Header -->
             <div class="dashboard-header">
                 <div class="header-left">
-                    <h1><i class="fas fa-minus-circle"></i> Withdrawal</h1>
-                    <p>Request withdrawal from your balance</p>
+                    <h1>Withdrawal</h1>
+                    <p>Request a withdrawal from your account</p>
                 </div>
-            </div>
-            
-            <!-- Important Notice - Withdrawal Hours -->
-            <div class="dashboard-card" style="background: linear-gradient(135deg, rgba(255, 68, 68, 0.1), rgba(255, 136, 0, 0.1)); border-left: 4px solid #ff4444; margin-bottom: var(--spacing-lg);">
-                <div style="display: flex; align-items: center; gap: var(--spacing-md);">
-                    <div style="font-size: 2rem; color: #ff4444;">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div>
-                        <h3 style="margin-bottom: 0.5rem; color: #ff4444;">⏰ Withdrawal Hours</h3>
-                        <p style="color: var(--text-gray); margin: 0;">
-                            <strong>Monday to Friday: 9:00 AM - 9:00 PM</strong><br>
-                            <small>Withdrawals are closed on weekends and outside business hours.</small>
-                        </p>
+                <div class="header-right">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-details">
+                            <span class="user-name" id="userName">Loading...</span>
+                            <span class="user-balance" id="userBalance">$0.00</span>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Time Notice (Dynamic) -->
+            <!-- Time Notice -->
             <div id="timeNotice"></div>
             
-            <!-- Balance Overview - FIXED ALIGNMENT -->
+            <!-- Stats Grid -->
             <div class="stats-grid-4">
                 <div class="stat-card">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, var(--neon-green), #00cc66);">
                         <i class="fas fa-wallet"></i>
                     </div>
                     <div class="stat-info">
-                        <h3 id="userBalance">$0.00</h3>
+                        <h3 id="availableBalance">$0.00</h3>
                         <p>Available Balance</p>
                     </div>
                 </div>
@@ -252,7 +273,7 @@
                                         type="number" 
                                         id="amount" 
                                         class="form-input" 
-                                        placeholder="Enter amount"
+                                        placeholder="50"
                                         min="5"
                                         step="0.01"
                                         required
@@ -261,6 +282,10 @@
                                 <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 0.5rem;">
                                     Minimum: $5
                                 </p>
+                                <div class="pkr-hint" id="pkrHint">
+                                    <i class="fas fa-sync-alt"></i>
+                                    <span>Enter amount to see PKR equivalent</span>
+                                </div>
                             </div>
                         </div>
                         
@@ -317,6 +342,15 @@
                                 <span>You'll Receive:</span>
                                 <strong id="displayNet">$0.00</strong>
                             </div>
+                            <div id="pkrDisplay" style="display: none; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 0.5rem; margin-top: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; color: var(--electric-blue);">
+                                    <span>PKR Equivalent:</span>
+                                    <strong id="displayPKR">₨0.00</strong>
+                                </div>
+                                <p style="font-size: 0.75rem; color: var(--text-gray); margin-top: 0.25rem; text-align: right;">
+                                    Rate: 1 USD = <span id="exchangeRate">280</span> PKR
+                                </p>
+                            </div>
                         </div>
                     </div>
                     
@@ -369,15 +403,31 @@
     <script src="js/withdrawal.js"></script>
     
     <script>
-        // Update amount display
+        // USD to PKR exchange rate (you can update this or fetch from API)
+        const USD_TO_PKR = 280;
+        
+        // Update amount display with PKR conversion
         document.getElementById('amount').addEventListener('input', (e) => {
             const amount = parseFloat(e.target.value) || 0;
             const tax = amount * 0.05;
             const net = amount - tax;
+            const pkr = net * USD_TO_PKR;
             
+            // Update USD values
             document.getElementById('displayAmount').textContent = '$' + amount.toFixed(2);
             document.getElementById('displayTax').textContent = '$' + tax.toFixed(2);
             document.getElementById('displayNet').textContent = '$' + net.toFixed(2);
+            
+            // Update PKR values
+            if (amount > 0) {
+                document.getElementById('pkrDisplay').style.display = 'block';
+                document.getElementById('displayPKR').textContent = '₨' + pkr.toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('exchangeRate').textContent = USD_TO_PKR;
+                document.getElementById('pkrHint').innerHTML = '<i class="fas fa-check-circle"></i><span>PKR equivalent shown below</span>';
+            } else {
+                document.getElementById('pkrDisplay').style.display = 'none';
+                document.getElementById('pkrHint').innerHTML = '<i class="fas fa-sync-alt"></i><span>Enter amount to see PKR equivalent</span>';
+            }
         });
     </script>
 </body>
