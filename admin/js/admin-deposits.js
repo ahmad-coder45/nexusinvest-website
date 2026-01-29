@@ -99,7 +99,10 @@ async function viewProof(depositId) {
         const userDoc = await db.collection('users').doc(deposit.userId).get();
         const userName = userDoc.data()?.fullName || 'Unknown User';
         
-        document.getElementById('proofImage').src = deposit.proofUrl;
+        // Handle both base64 and URL images
+        const imageSource = deposit.proofImage || deposit.proofUrl || '';
+        document.getElementById('proofImage').src = imageSource;
+        
         document.getElementById('proofDetails').innerHTML = `
             <div style="padding: var(--spacing-md); background: rgba(0, 102, 255, 0.05); border-radius: var(--radius-md); margin-top: var(--spacing-md);">
                 <div style="margin-bottom: 0.5rem;"><strong>User:</strong> ${userName}</div>
@@ -122,7 +125,7 @@ function closeProofModal() {
 }
 
 async function approveDeposit(depositId) {
-    if (!confirm('Are you sure you want to approve this deposit?')) {
+    if (!confirm('Are you sure you want to approve this deposit?\n\nThis will automatically add the amount to the user\'s balance.')) {
         return;
     }
     
@@ -132,6 +135,19 @@ async function approveDeposit(depositId) {
         const depositDoc = await db.collection('deposits').doc(depositId).get();
         const deposit = depositDoc.data();
         
+        // Get user's current balance
+        const userDoc = await db.collection('users').doc(deposit.userId).get();
+        const userData = userDoc.data();
+        const currentBalance = userData.balance || 0;
+        const newBalance = currentBalance + deposit.amount;
+        
+        // Update user balance
+        await db.collection('users').doc(deposit.userId).update({
+            balance: newBalance,
+            totalDeposited: (userData.totalDeposited || 0) + deposit.amount,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
         // Update deposit status
         await db.collection('deposits').doc(depositId).update({
             status: 'approved',
@@ -139,13 +155,31 @@ async function approveDeposit(depositId) {
             approvedBy: currentAdmin.uid
         });
         
-        showToast('Deposit approved successfully!', 'success');
+        // Update transaction status
+        const transactionsSnapshot = await db.collection('transactions')
+            .where('userId', '==', deposit.userId)
+            .where('type', '==', 'deposit')
+            .where('amount', '==', deposit.amount)
+            .where('status', '==', 'pending')
+            .orderBy('createdAt', 'desc')
+            .limit(1)
+            .get();
+        
+        if (!transactionsSnapshot.empty) {
+            const transactionDoc = transactionsSnapshot.docs[0];
+            await db.collection('transactions').doc(transactionDoc.id).update({
+                status: 'completed',
+                completedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+        
+        showToast(`Deposit approved! User balance updated: ${formatCurrency(currentBalance)} → ${formatCurrency(newBalance)}`, 'success');
         await loadPendingDeposits();
         hideLoading();
         
     } catch (error) {
         console.error('Error approving deposit:', error);
-        showToast('Failed to approve deposit', 'error');
+        showToast('Failed to approve deposit: ' + error.message, 'error');
         hideLoading();
     }
 }
@@ -176,12 +210,35 @@ if (rejectForm) {
         try {
             showLoading();
             
+            const depositDoc = await db.collection('deposits').doc(currentDepositId).get();
+            const deposit = depositDoc.data();
+            
+            // Update deposit status
             await db.collection('deposits').doc(currentDepositId).update({
                 status: 'rejected',
                 rejectionReason: reason,
                 rejectedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 rejectedBy: currentAdmin.uid
             });
+            
+            // Update transaction status
+            const transactionsSnapshot = await db.collection('transactions')
+                .where('userId', '==', deposit.userId)
+                .where('type', '==', 'deposit')
+                .where('amount', '==', deposit.amount)
+                .where('status', '==', 'pending')
+                .orderBy('createdAt', 'desc')
+                .limit(1)
+                .get();
+            
+            if (!transactionsSnapshot.empty) {
+                const transactionDoc = transactionsSnapshot.docs[0];
+                await db.collection('transactions').doc(transactionDoc.id).update({
+                    status: 'rejected',
+                    rejectionReason: reason,
+                    rejectedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }
             
             showToast('Deposit rejected', 'success');
             closeRejectModal();
