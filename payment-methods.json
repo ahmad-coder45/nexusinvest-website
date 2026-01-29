@@ -1,0 +1,65 @@
+{
+  "methods": [
+    {
+      "id": "binance",
+      "name": "Binance",
+      "subtitle": "USDT (TRX Network)",
+      "icon": "fab fa-bitcoin",
+      "color": "#F3BA2F",
+      "type": "wallet",
+      "accountDetails": "TXn7Y8WL9sZ3bVjviGfR5pNuySwV8Mf3kK",
+      "active": true,
+      "order": 1
+    },
+    {
+      "id": "jazzcash",
+      "name": "JazzCash",
+      "subtitle": "Mobile Wallet",
+      "icon": "fas fa-mobile-alt",
+      "color": "#FF6B00",
+      "type": "iban",
+      "accountDetails": "PK00JAZZ0000001234567890",
+      "active": true,
+      "order": 2
+    },
+    {
+      "id": "easypaisa",
+      "name": "EasyPaisa",
+      "subtitle": "Mobile Wallet",
+      "icon": "fas fa-wallet",
+      "color": "#00A859",
+      "type": "iban",
+      "accountDetails": "PK00EASY0000001234567890",
+      "active": true,
+      "order": 3
+    },
+    {
+      "id": "nayapay",
+      "name": "NayaPay",
+      "subtitle": "Digital Bank",
+      "icon": "fas fa-university",
+      "color": "#00D4FF",
+      "type": "iban",
+      "accountDetails": "PK36NAYA0000001234567890",
+      "active": true,
+      "order": 4
+    },
+    {
+      "id": "sadapay",
+      "name": "SadaPay",
+      "subtitle": "Digital Bank",
+      "icon": "fas fa-credit-card",
+      "color": "#7C3AED",
+      "type": "iban",
+      "accountDetails": "PK00SADA0000001234567890",
+      "active": false,
+      "order": 5
+    }
+  ],
+  "settings": {
+    "minDeposit": 5,
+    "maxDeposit": 10000,
+    "currency": "USD",
+    "conversionRate": 280
+  }
+}
