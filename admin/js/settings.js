@@ -5,6 +5,19 @@
 // Load settings on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadSettings();
+    loadPaymentMethods();
+    
+    // Update label based on selected payment method
+    document.getElementById('newPaymentMethod').addEventListener('change', (e) => {
+        const label = document.getElementById('accountDetailsLabel');
+        if (e.target.value === 'binance') {
+            label.textContent = 'Wallet Address (TRX Network)';
+            document.getElementById('newAccountDetails').placeholder = 'Enter Binance USDT wallet address (TRX)';
+        } else {
+            label.textContent = 'IBAN Number';
+            document.getElementById('newAccountDetails').placeholder = 'Enter IBAN number (e.g., PK00XXXXXXXXXXXXXXXXXXXX)';
+        }
+    });
 });
 
 // ============================================
@@ -22,26 +35,193 @@ async function loadSettings() {
             if (settings.supportEmail) document.getElementById('supportEmail').value = settings.supportEmail;
             if (settings.minDeposit) document.getElementById('minDeposit').value = settings.minDeposit;
             if (settings.minWithdrawal) document.getElementById('minWithdrawal').value = settings.minWithdrawal;
-            
-            // Salary Plans
-            if (settings.plan1Amount) document.getElementById('plan1Amount').value = settings.plan1Amount;
-            if (settings.plan2Amount) document.getElementById('plan2Amount').value = settings.plan2Amount;
-            if (settings.plan3Amount) document.getElementById('plan3Amount').value = settings.plan3Amount;
-            
-            // Referral Settings
-            if (settings.regBonus) document.getElementById('regBonus').value = settings.regBonus;
-            if (settings.refCommission) document.getElementById('refCommission').value = settings.refCommission;
-            
-            // Payment Methods
-            if (settings.enableCrypto !== undefined) document.getElementById('enableCrypto').checked = settings.enableCrypto;
-            if (settings.enableBank !== undefined) document.getElementById('enableBank').checked = settings.enableBank;
-            if (settings.enablePaypal !== undefined) document.getElementById('enablePaypal').checked = settings.enablePaypal;
-            
-            // Maintenance Mode
-            if (settings.maintenanceMode !== undefined) document.getElementById('maintenanceMode').checked = settings.maintenanceMode;
         }
     } catch (error) {
         console.error('Error loading settings:', error);
+    }
+}
+
+// ============================================
+// PAYMENT METHODS MANAGEMENT
+// ============================================
+
+// Load payment methods
+async function loadPaymentMethods() {
+    try {
+        const methodsSnapshot = await db.collection('paymentMethods')
+            .orderBy('createdAt', 'desc')
+            .get();
+        
+        const listDiv = document.getElementById('paymentMethodsList');
+        
+        if (methodsSnapshot.empty) {
+            listDiv.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>No payment methods added yet</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Add your first payment method above</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        
+        methodsSnapshot.forEach(doc => {
+            const method = doc.data();
+            const methodId = doc.id;
+            
+            // Get method display name and icon
+            const methodInfo = getMethodInfo(method.method);
+            
+            html += `
+                <div class="payment-account-item">
+                    <div class="payment-account-info">
+                        <div class="payment-account-name">
+                            <i class="${methodInfo.icon}" style="color: ${methodInfo.color}; margin-right: 0.5rem;"></i>
+                            ${methodInfo.name}
+                        </div>
+                        <div class="payment-account-details">
+                            ${method.accountDetails}
+                        </div>
+                    </div>
+                    <div class="payment-account-actions">
+                        <button 
+                            class="btn-toggle ${method.active ? 'active' : 'inactive'}" 
+                            onclick="togglePaymentMethod('${methodId}', ${!method.active})"
+                        >
+                            <i class="fas fa-${method.active ? 'check' : 'times'}"></i>
+                            ${method.active ? 'Active' : 'Inactive'}
+                        </button>
+                        <button class="btn-remove" onclick="removePaymentMethod('${methodId}', '${methodInfo.name}')">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        listDiv.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Error loading payment methods:', error);
+        document.getElementById('paymentMethodsList').innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Error loading payment methods</p>
+            </div>
+        `;
+    }
+}
+
+// Get method info (name, icon, color)
+function getMethodInfo(method) {
+    const methodMap = {
+        'binance': { name: 'Binance (USDT TRX)', icon: 'fab fa-bitcoin', color: '#F3BA2F' },
+        'jazzcash': { name: 'JazzCash', icon: 'fas fa-mobile-alt', color: '#FF6B00' },
+        'easypaisa': { name: 'EasyPaisa', icon: 'fas fa-wallet', color: '#00A859' },
+        'nayapay': { name: 'NayaPay', icon: 'fas fa-university', color: '#00D4FF' },
+        'sadapay': { name: 'SadaPay', icon: 'fas fa-credit-card', color: '#7C3AED' },
+        'bank': { name: 'Bank Account', icon: 'fas fa-building-columns', color: '#4A90E2' }
+    };
+    
+    return methodMap[method] || { name: method, icon: 'fas fa-money-bill', color: '#888' };
+}
+
+// Add payment method
+async function addPaymentMethod() {
+    try {
+        const method = document.getElementById('newPaymentMethod').value;
+        const accountDetails = document.getElementById('newAccountDetails').value.trim();
+        
+        if (!method) {
+            alert('Please select a payment method');
+            return;
+        }
+        
+        if (!accountDetails) {
+            alert('Please enter account details');
+            return;
+        }
+        
+        // Validate IBAN format for non-Binance methods
+        if (method !== 'binance') {
+            if (!accountDetails.startsWith('PK') || accountDetails.length < 24) {
+                alert('Please enter a valid IBAN number (e.g., PK00XXXXXXXXXXXXXXXXXXXX)');
+                return;
+            }
+        }
+        
+        // Check if method already exists
+        const existingMethod = await db.collection('paymentMethods')
+            .where('method', '==', method)
+            .get();
+        
+        if (!existingMethod.empty) {
+            alert('This payment method already exists. Please remove it first or edit the existing one.');
+            return;
+        }
+        
+        // Add to Firestore
+        await db.collection('paymentMethods').add({
+            method: method,
+            accountDetails: accountDetails,
+            active: true,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        alert('Payment method added successfully!');
+        
+        // Clear form
+        document.getElementById('newPaymentMethod').value = '';
+        document.getElementById('newAccountDetails').value = '';
+        
+        // Reload list
+        loadPaymentMethods();
+        
+    } catch (error) {
+        console.error('Error adding payment method:', error);
+        alert('Error adding payment method: ' + error.message);
+    }
+}
+
+// Toggle payment method active/inactive
+async function togglePaymentMethod(methodId, newStatus) {
+    try {
+        await db.collection('paymentMethods').doc(methodId).update({
+            active: newStatus,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        alert(`Payment method ${newStatus ? 'activated' : 'deactivated'} successfully!`);
+        
+        // Reload list
+        loadPaymentMethods();
+        
+    } catch (error) {
+        console.error('Error toggling payment method:', error);
+        alert('Error updating payment method: ' + error.message);
+    }
+}
+
+// Remove payment method
+async function removePaymentMethod(methodId, methodName) {
+    if (!confirm(`Are you sure you want to remove ${methodName}?\n\nThis will remove it from the deposit page for all users.`)) {
+        return;
+    }
+    
+    try {
+        await db.collection('paymentMethods').doc(methodId).delete();
+        
+        alert('Payment method removed successfully!');
+        
+        // Reload list
+        loadPaymentMethods();
+        
+    } catch (error) {
+        console.error('Error removing payment method:', error);
+        alert('Error removing payment method: ' + error.message);
     }
 }
 
@@ -67,73 +247,6 @@ async function savePlatformSettings() {
     } catch (error) {
         console.error('Error saving platform settings:', error);
         alert('Error saving settings: ' + error.message);
-    }
-}
-
-// ============================================
-// SAVE SALARY PLANS
-// ============================================
-async function saveSalaryPlans() {
-    try {
-        const plan1Amount = parseFloat(document.getElementById('plan1Amount').value);
-        const plan2Amount = parseFloat(document.getElementById('plan2Amount').value);
-        const plan3Amount = parseFloat(document.getElementById('plan3Amount').value);
-        
-        await db.collection('settings').doc('platform').set({
-            plan1Amount,
-            plan2Amount,
-            plan3Amount,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-        
-        alert('Salary plans saved successfully!');
-    } catch (error) {
-        console.error('Error saving salary plans:', error);
-        alert('Error saving salary plans: ' + error.message);
-    }
-}
-
-// ============================================
-// SAVE REFERRAL SETTINGS
-// ============================================
-async function saveReferralSettings() {
-    try {
-        const regBonus = parseFloat(document.getElementById('regBonus').value);
-        const refCommission = parseFloat(document.getElementById('refCommission').value);
-        
-        await db.collection('settings').doc('platform').set({
-            regBonus,
-            refCommission,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-        
-        alert('Referral settings saved successfully!');
-    } catch (error) {
-        console.error('Error saving referral settings:', error);
-        alert('Error saving referral settings: ' + error.message);
-    }
-}
-
-// ============================================
-// SAVE PAYMENT METHODS
-// ============================================
-async function savePaymentMethods() {
-    try {
-        const enableCrypto = document.getElementById('enableCrypto').checked;
-        const enableBank = document.getElementById('enableBank').checked;
-        const enablePaypal = document.getElementById('enablePaypal').checked;
-        
-        await db.collection('settings').doc('platform').set({
-            enableCrypto,
-            enableBank,
-            enablePaypal,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-        
-        alert('Payment methods saved successfully!');
-    } catch (error) {
-        console.error('Error saving payment methods:', error);
-        alert('Error saving payment methods: ' + error.message);
     }
 }
 
@@ -177,24 +290,5 @@ async function changePassword() {
         } else {
             alert('Error changing password: ' + error.message);
         }
-    }
-}
-
-// ============================================
-// SAVE MAINTENANCE MODE
-// ============================================
-async function saveMaintenanceMode() {
-    try {
-        const maintenanceMode = document.getElementById('maintenanceMode').checked;
-        
-        await db.collection('settings').doc('platform').set({
-            maintenanceMode,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-        
-        alert('Maintenance mode ' + (maintenanceMode ? 'enabled' : 'disabled') + ' successfully!');
-    } catch (error) {
-        console.error('Error saving maintenance mode:', error);
-        alert('Error saving maintenance mode: ' + error.message);
     }
 }
