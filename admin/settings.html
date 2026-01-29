@@ -17,6 +17,125 @@
     <!-- Styles -->
     <link rel="stylesheet" href="css/admin-variables.css">
     <link rel="stylesheet" href="css/admin-dashboard.css">
+    
+    <style>
+        .payment-account-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 102, 255, 0.2);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-account-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 102, 255, 0.4);
+            transform: translateX(5px);
+        }
+        
+        .payment-account-info {
+            flex: 1;
+        }
+        
+        .payment-account-name {
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+        
+        .payment-account-details {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .payment-account-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-toggle {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-toggle.active {
+            background: var(--neon-green);
+            color: var(--primary-black);
+        }
+        
+        .btn-toggle.inactive {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+        
+        .btn-toggle:hover {
+            transform: scale(1.05);
+        }
+        
+        .btn-remove {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 68, 68, 0.1);
+            color: #ff4444;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-remove:hover {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+            transform: scale(1.05);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-gray);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+        
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            color: var(--text-light);
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--electric-blue);
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+        }
+        
+        .form-select option {
+            background: var(--secondary-black);
+            color: var(--text-light);
+            padding: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     <div class="admin-wrapper">
@@ -81,7 +200,7 @@
             <div class="admin-header">
                 <div class="header-left">
                     <h1>Settings</h1>
-                    <p>Manage platform settings and configurations</p>
+                    <p>Manage platform settings and payment methods</p>
                 </div>
                 <div class="header-right">
                     <button class="notification-btn">
@@ -100,6 +219,57 @@
             
             <!-- Settings Cards -->
             <div class="settings-grid">
+                <!-- Deposit Accounts Management -->
+                <div class="card" style="grid-column: span 2;">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-university"></i>
+                            Deposit Accounts
+                        </h2>
+                    </div>
+                    
+                    <!-- Add New Payment Method -->
+                    <div style="background: rgba(0, 102, 255, 0.05); padding: var(--spacing-lg); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg);">
+                        <h3 style="margin-bottom: var(--spacing-md); color: var(--electric-blue); font-size: 1rem;">
+                            <i class="fas fa-plus-circle"></i> Add New Payment Method
+                        </h3>
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label>Payment Method Name</label>
+                                <select id="newPaymentMethod" class="form-select">
+                                    <option value="">Select payment method</option>
+                                    <option value="binance">Binance (USDT TRX)</option>
+                                    <option value="jazzcash">JazzCash</option>
+                                    <option value="easypaisa">EasyPaisa</option>
+                                    <option value="nayapay">NayaPay</option>
+                                    <option value="sadapay">SadaPay</option>
+                                    <option value="bank">Bank Account</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label id="accountDetailsLabel">Account Details (Wallet Address / IBAN)</label>
+                                <input type="text" id="newAccountDetails" class="form-control" placeholder="Enter wallet address or IBAN number">
+                            </div>
+                            <button class="btn btn-primary" onclick="addPaymentMethod()">
+                                <i class="fas fa-plus"></i> Add Payment Method
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Existing Payment Methods -->
+                    <div>
+                        <h3 style="margin-bottom: var(--spacing-md); color: var(--text-light); font-size: 1rem;">
+                            <i class="fas fa-list"></i> Existing Payment Methods
+                        </h3>
+                        <div id="paymentMethodsList">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                                <p>Loading payment methods...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Platform Settings -->
                 <div class="card">
                     <div class="card-header">
@@ -119,96 +289,13 @@
                         </div>
                         <div class="form-group">
                             <label>Minimum Deposit ($)</label>
-                            <input type="number" id="minDeposit" value="10" class="form-control">
+                            <input type="number" id="minDeposit" value="5" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Minimum Withdrawal ($)</label>
                             <input type="number" id="minWithdrawal" value="5" class="form-control">
                         </div>
                         <button class="btn btn-primary" onclick="savePlatformSettings()">
-                            <i class="fas fa-save"></i> Save Changes
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Salary Plans -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <i class="fas fa-money-bill-wave"></i>
-                            Salary Plans
-                        </h2>
-                    </div>
-                    <div class="settings-form">
-                        <div class="form-group">
-                            <label>Plan 1 Amount ($)</label>
-                            <input type="number" id="plan1Amount" value="100" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Plan 2 Amount ($)</label>
-                            <input type="number" id="plan2Amount" value="200" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Plan 3 Amount ($)</label>
-                            <input type="number" id="plan3Amount" value="300" class="form-control">
-                        </div>
-                        <button class="btn btn-primary" onclick="saveSalaryPlans()">
-                            <i class="fas fa-save"></i> Save Changes
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Referral Settings -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <i class="fas fa-users"></i>
-                            Referral Settings
-                        </h2>
-                    </div>
-                    <div class="settings-form">
-                        <div class="form-group">
-                            <label>Registration Bonus ($)</label>
-                            <input type="number" id="regBonus" value="0.50" step="0.01" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Referral Commission (%)</label>
-                            <input type="number" id="refCommission" value="5" class="form-control">
-                        </div>
-                        <button class="btn btn-primary" onclick="saveReferralSettings()">
-                            <i class="fas fa-save"></i> Save Changes
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Payment Methods -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <i class="fas fa-credit-card"></i>
-                            Payment Methods
-                        </h2>
-                    </div>
-                    <div class="settings-form">
-                        <div class="form-group">
-                            <label>
-                                <input type="checkbox" id="enableCrypto" checked>
-                                Enable Cryptocurrency
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <input type="checkbox" id="enableBank" checked>
-                                Enable Bank Transfer
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <input type="checkbox" id="enablePaypal" checked>
-                                Enable PayPal
-                            </label>
-                        </div>
-                        <button class="btn btn-primary" onclick="savePaymentMethods()">
                             <i class="fas fa-save"></i> Save Changes
                         </button>
                     </div>
@@ -236,30 +323,6 @@
                         </button>
                     </div>
                 </div>
-                
-                <!-- Maintenance Mode -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <i class="fas fa-tools"></i>
-                            Maintenance Mode
-                        </h2>
-                    </div>
-                    <div class="settings-form">
-                        <div class="form-group">
-                            <label>
-                                <input type="checkbox" id="maintenanceMode">
-                                Enable Maintenance Mode
-                            </label>
-                            <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 0.5rem;">
-                                When enabled, users won't be able to access the platform
-                            </p>
-                        </div>
-                        <button class="btn btn-primary" onclick="saveMaintenanceMode()">
-                            <i class="fas fa-save"></i> Save Changes
-                        </button>
-                    </div>
-                </div>
             </div>
         </main>
     </div>
@@ -273,61 +336,5 @@
     <script src="../js/firebase-config.js"></script>
     <script src="js/admin-auth.js"></script>
     <script src="js/settings.js"></script>
-    
-    <style>
-        .settings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: var(--spacing-lg);
-        }
-        
-        .settings-form {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .form-group label {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-        
-        .form-control {
-            padding: 0.75rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 102, 255, 0.3);
-            border-radius: var(--radius-md);
-            color: var(--text-light);
-            font-size: 0.95rem;
-            transition: var(--transition-fast);
-        }
-        
-        .form-control:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--electric-blue);
-            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
-        }
-        
-        .form-group label input[type="checkbox"] {
-            margin-right: 0.5rem;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-        
-        @media (max-width: 768px) {
-            .settings-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </body>
 </html>
